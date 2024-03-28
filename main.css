@@ -1,0 +1,13 @@
+/*!***************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/style/style.scss ***!
+  \***************************************************************************************************************/
+body {
+  color: green;
+}
+
+h1 {
+  color: blue;
+  text-align: center;
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5jc3MiLCJtYXBwaW5ncyI6Ijs7O0FBR0E7RUFDSSxZQUpTO0FBRWI7O0FBSUE7RUFDRSxXQU5XO0VBT1g7QUFERixDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbHMvLi9zcmMvc3R5bGUvc3R5bGUuc2NzcyJdLCJzb3VyY2VzQ29udGVudCI6WyIkYm9keS1jb2xvcjogZ3JlZW47XHJcbiR0ZXh0LWNvbG9yOiBibHVlO1xyXG5cclxuYm9keXtcclxuICAgIGNvbG9yOiAkYm9keS1jb2xvcjtcclxufVxyXG5oMXtcclxuICBjb2xvcjogJHRleHQtY29sb3I7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG59XHJcbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==*/
