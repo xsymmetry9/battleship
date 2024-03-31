@@ -61,7 +61,7 @@ class Gameboard{
     if(this.grid[x][y] === null)
     {
       this.grid[x][y] = "miss"; //mark down miss
-      return "missed";
+      return "miss";
     } else{
       const ship = this.grid[x][y];
       ship.hit();
@@ -69,9 +69,9 @@ class Gameboard{
 
       if(ship.isSunk())
       {
-        return "sunk";
+        return `${ship.name} has been sunk`;
       } else {
-        return "hit";
+        return "Hit! Opponent's turn";
       }
 
     }
