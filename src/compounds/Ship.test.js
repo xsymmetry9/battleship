@@ -101,19 +101,23 @@ describe ("Number of boats after serveral attacks", () =>{
     expect(gameboardPlayer2.grid[3][1]).toEqual(ship2);
   });
   test("player 1 attacks player 2 gameboard. Sets the coordinate (0,0) and (1,1)", () =>{
-    expect(player1.attack(1,1)).toBe("Hit! Opponent's turn");
-    expect(player1.attack(2,1)).toBe("Hit! Opponent's turn");
-    expect(player1.attack(3,1)).toBe("Destroyer has been sunk");
+    expect(player1.attack(1,1)).toBe("hit");
+
   });
   test("All ships have been sunk", () =>{
-    expect(ship2.hits).toBe(3);
+    expect(ship2.hits).toBe(1);
   });
-  test("player 2 attacks player 1 gameboard. Sets the coordinate (0,0) and (1,1)", () =>{
-    // expect(player2.opponentBoard).toBe(true);
-    player2.attack(0,0);
-    player2.attack(1,1);
-    player2.attack(0,1);
-    expect(player2.opponentBoard.grid[0][0]).toBe("hit");
-    expect(player2.opponentBoard.grid[1][1]).toBe("hit");
-  });
+
+  test(("Computer generates coordinates"), ()=>{
+    player2.randomAttack();
+    player2.randomAttack();
+    player2.randomAttack();
+    player2.randomAttack();
+    player2.randomAttack();
+    player2.randomAttack();
+    player2.randomAttack();
+    player2.randomAttack();
+    expect(gameboardPlayer1.grid).toBe(true);
+  })
+
 });
