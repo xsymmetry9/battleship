@@ -1,11 +1,4 @@
 import "./style/style.scss";
+import App from "./compounds/App.js";
 
-const home = () => {
-  const container = document.createElement("div");
-  container.innerHTML = `<h1>Oh yes!</h1>`
-
-  return container;
-}
-const app = document.getElementById("app");
-
-app.appendChild(home());
+addEventListener("DOMContentLoaded", App.loadPage());
