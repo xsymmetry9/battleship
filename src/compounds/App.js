@@ -8,6 +8,18 @@ const gameboardPlayer2 = new Gameboard(10,10);
 const player1 = new Player("Gary", gameboardPlayer1, gameboardPlayer2, true);
 const player2 = new Player("computer", gameboardPlayer2, gameboardPlayer1, false);
 
+const ship1 = new Ship("Destroyer", 3);
+const ship2 = new Ship("Destroyer", 5);
+const ship3 = new Ship("Destroyer", 7);
+const ship4 = new Ship("Destroyer", 3);
+const ship5 = new Ship("Destroyer", 5);
+
+player1.placeShip(ship1, 0, 0, "horizontal");
+player1.placeShip(ship2, 5, 5, "vertical");
+player1.placeShip(ship3, 2, 2, "horizontal");
+player1.placeShip(ship4, 4, 0, "horizontal");
+player1.placeShip(ship5, 9, 2, "vertical");
+
 export default class App{
     static loadPage(){
         const body = document.getElementById("root");
@@ -21,28 +33,29 @@ export default class App{
         const content = document.createElement("div");
         content.className = "playerBoard"
 
-        content.appendChild(this.loadPlayer(player1));
-        content.appendChild(this.loadPlayer(player2));
+        content.appendChild(this.loadPlayer(player1, "player1"));
+        content.appendChild(this.loadPlayer(player2, "player2"));
         return content;
     }
 
-    static loadPlayer(player){
+    static loadPlayer(player, id){
         const container = document.createElement("div");
         
         const title = document.createElement("h2");
         title.textContent = player.name;
 
-        container.appendChild(this.loadGrid(player.board));
+        container.appendChild(this.loadGrid(player.board, id));
         container.appendChild(title);
 
 
         return container;
     }
-    static loadGrid(gameboard){
+    static loadGrid(gameboard, id){
         const getGameboard = gameboard;
 
         const container = document.createElement("div");
         container.className = "gameboard";
+        container.setAttribute("id", id)
 
         for (let i = 0; i < getGameboard.cols; i++)
         {
@@ -50,6 +63,11 @@ export default class App{
             {
                 const square = document.createElement("div");
                 square.className = "square";
+
+                if(gameboard.grid[i][j] !== null)
+                {
+                    square.classList.add("ship");
+                }
                 square.setAttribute("row", i);
                 square.setAttribute("col", j);
 

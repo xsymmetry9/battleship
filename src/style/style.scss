@@ -7,12 +7,16 @@ $bg-color: whitesmoke;
   margin: 0;
 }
 body{
-    color: $body-color;
     background-color: $bg-color;
 }
 h1{
   color: $text-color;
   text-align: center;
+}
+h2{
+  text-transform: capitalize;
+  text-align: center;
+  font-size: 2rem;
 }
 
 .playerBoard{
@@ -31,12 +35,17 @@ h1{
   height: 400px;
   width: 400px;
   gap: 2px;
-
+  
 }
+
 .square{
   border: 1px solid black;
 }
 .square:hover{
   cursor: pointer;
   background-color: lightgrey;
+}
+
+.ship{
+  background-color: black;
 }
