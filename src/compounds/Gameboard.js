@@ -20,8 +20,6 @@ class Gameboard{
     return grid;
   }
   placeShip(ship, row, col, direction){
-    //Cruiser, 3, horizontal
-    //[[null, null, null], [battleship, battleship, battleship], [null, null, null]]
 
 
     if(direction === "horizontal")
@@ -66,13 +64,14 @@ class Gameboard{
       const ship = this.grid[x][y];
       ship.hit();
       this.grid[x][y] = "hit";
+      return "hit";
 
-      if(ship.isSunk())
-      {
-        return `${ship.name} has been sunk`;
-      } else {
-        return "Hit! Opponent's turn";
-      }
+      // if(ship.isSunk())
+      // {
+      //   return `${ship.name} has been sunk`;
+      // } else {
+      //   return "Hit! Opponent's turn";
+      // }
 
     }
   }

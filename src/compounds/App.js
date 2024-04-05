@@ -19,19 +19,52 @@ player1.placeShip(ship2, 5, 5, "vertical");
 player1.placeShip(ship3, 2, 2, "horizontal");
 player1.placeShip(ship4, 4, 0, "horizontal");
 player1.placeShip(ship5, 9, 2, "vertical");
+player2.placeShip(ship1, 0, 0, "horizontal");
+player2.placeShip(ship2, 5, 5, "vertical");
+player2.placeShip(ship3, 2, 2, "horizontal");
+player2.placeShip(ship4, 4, 0, "horizontal");
+player2.placeShip(ship5, 9, 2, "vertical");
 
 export default class App{
     static loadPage(){
         const body = document.getElementById("root");
 
-        body.appendChild(this.loadContent());
+        body.appendChild(this.loadBanner());
+        body.appendChild(this.loadButtons());
+        body.appendChild(this.loadDOM());
 
         this.handler();
+        this.plotShips(player1.board);
+    }
+    static loadBanner(){
+        const container = document.createElement("div");
+        container.className = "banner";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "display-wrapper";
+        const title = document.createElement("h2")
+        title.textContent = "Battleship";
+        wrapper.appendChild(title);
+
+        container.appendChild(wrapper);
+
+        return container;
+    }
+
+    static loadButtons(){
+        const buttons = document.createElement("div");
+        buttons.className = "buttons-container"
+
+        const startBtn = document.createElement("button");
+        startBtn.textContent = "Start Game";
+        buttons.appendChild(startBtn);
+
+        return buttons;
     }
     
-    static loadContent(){
+    static loadDOM(){
         const content = document.createElement("div");
-        content.className = "playerBoard"
+        content.className = "boards-container"
 
         content.appendChild(this.loadPlayer(player1, "player1"));
         content.appendChild(this.loadPlayer(player2, "player2"));
@@ -64,10 +97,10 @@ export default class App{
                 const square = document.createElement("div");
                 square.className = "square";
 
-                if(gameboard.grid[i][j] !== null)
-                {
-                    square.classList.add("ship");
-                }
+                // if(gameboard.grid[i][j] !== null)
+                // {
+                //     square.classList.add("ship");
+                // }
                 square.setAttribute("row", i);
                 square.setAttribute("col", j);
 
@@ -79,16 +112,42 @@ export default class App{
 
     }
 
+    static plotShips(gameboard){
+        const getSquares = document.getElementById("player1").childNodes;
+
+        getSquares.forEach((item) =>{
+            const col = item.getAttribute("col");
+            const row = item.getAttribute("row");
+            if(gameboard.grid[col][row] !== null)
+            {
+                item.classList.add("ship");
+            }
+        })
+    }
+
     static handler(){
 
+        const move = (e) =>{
+            const square = e.currentTarget;
+            const col = square.getAttribute("col");
+            const row = square.getAttribute("row");
+
+            player1.attack(col, row);
+
+            if(player1.opponentBoard.grid[col][row] === "hit"){
+                square.classList.add("hit");
+            } else if(player1.opponentBoard.grid[col][row] === "miss")
+            {
+                square.classList.add("miss");
+            } else{
+                console.log("error");
+            }
+
+            square.removeEventListener(("click"), move);
+        }
         const squares = document.querySelectorAll(".square");
         squares.forEach((square) =>{
-            square.addEventListener(("click"), (e)=> {
-                const col = e.currentTarget.getAttribute("col");
-                const row = e.currentTarget.getAttribute("row");
-
-                console.log(`You have clicked ${col}, ${row}`);
-            })
+            square.addEventListener(("click"), move);
         })
     }
 
