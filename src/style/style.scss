@@ -1,6 +1,8 @@
 $body-color: green;
-$text-color: blue;
-$bg-color: whitesmoke;
+$bg-color: #EEEEEE;
+$dark: #31363F;
+$color-font-dark: #222831;
+$miss: #41C9E2;
 
 *{
   padding: 0;
@@ -8,10 +10,10 @@ $bg-color: whitesmoke;
   box-sizing: border-box;
 }
 body{
+  color: $color-font-dark;
     background-color: $bg-color;
 }
 h1{
-  color: $text-color;
   text-align: center;
 }
 h2{
@@ -27,7 +29,7 @@ h2{
 .display-wrapper{
   display: grid;
   padding: 1rem;
-  border: 1px solid black;
+  border: 1px solid $dark;
 }
 
 .buttons-container{
@@ -36,10 +38,11 @@ h2{
   padding: 3rem;
 }
 
-.button-container button{
+.buttons-container button{
   cursor: pointer;
   background-color: transparent;
   padding: .6rem 1.2rem;
+  border: 1px solid $dark;
 }
 
 
@@ -61,7 +64,7 @@ h2{
 }
 
 .square{
-  border: 1px solid black;
+  border: 1px solid $dark;
 }
 .square:hover{
   cursor: pointer;
@@ -69,12 +72,12 @@ h2{
 }
 
 .ship{
-  background-color: black;
+  background-color: $dark;
 }
 
 .hit{
   background-color: green;
 }
 .miss{
-  background-color: red;
+  background-color: $miss;
 }

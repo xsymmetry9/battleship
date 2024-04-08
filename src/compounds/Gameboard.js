@@ -1,56 +1,75 @@
 class Gameboard{
-  constructor(rows, cols) {
-    this.rows = rows; //y-axis
-    this.cols = cols; //x-axis
+  constructor() {
+    this.rows = 10; 
+    this.cols = 10;
     this.grid = this.createGrid();
+    this.boats = this.checkBoats();
   }
 
   createGrid(){
-    let grid = [];
-
-    for(let i = 0; i<this.rows; i++)
-    {
-      let row = [];
-      for(let j = 0; j<this.cols; j++)
-      {
-        row.push(null); //blank space
-      }
-      grid.push(row);
-    }
-    return grid;
+    return Array.from({ length: this.rows }, () => Array(this.cols).fill(null));
   }
+
+  clearGrid(){
+    this.grid.forEach(row => row.fill(null));
+  }
+
+  isValid(ship, row, col, direction){
+    if(direction === "horizontal"){
+      if(col + ship.length > this.cols)
+      {
+        return false // "Error: Ship doesn't fit horizontally.";
+      } else {
+        let index = 0;
+        while (index < ship.length)
+        {
+          if(this.grid[row][col + index] !== null){
+            return false //"Error: A ship is already present at this location horizontally."; //A ship is current in that location
+          }
+          index ++;         
+        }
+        return true; //Pass all test
+      }
+        
+    } else if(direction === "vertical") {
+        if(row + ship.length > this.rows) {
+          return false //"Ship doesn't fit vertically"; //Ship doesn't fit.
+          } else {
+            let index = 0;
+            while(index < ship.length) {
+              if(this.grid[row + index][col] !== null) {
+              return false //"A ship is already at this location vertically."; //A ship is current in that location
+                }
+              index++;
+              }
+            return true;
+
+            } 
+          }
+    else {
+    return false //"Invalid direction"; //invalid name
+    }
+  }
+
   placeShip(ship, row, col, direction){
-
-
+    if(!this.isValid(ship, row, col, direction))
+    return;
+    
     if(direction === "horizontal")
-    {
-      //checks for overlaps or out of bounds
-      for(let index = 0; index < ship.length; index++)
       {
-        if(col + index >= this.col || this.grid[row][col + index] !== null)
-          return false; //Cannot place ship
-      }
-      for(let index = 0; index < ship.length; index++)
-       {
-         this.grid[row][col + index] = ship;
-      }
-    } else if (direction === "vertical") {
+        //checks for overlaps or out of bounds
+        for(let index = 0; index < ship.length; index++)
+         {
+           this.grid[row][col + index] = ship;
+        }
+      } else if(direction === "vertical"){ //direction is horizontal
+        //if everything passes, place the ship vertically
+        for(let index = 0; index < ship.length; index++){
+          this.grid[row + index][col] = ship;
+        }
+      } 
+    } 
 
-      //checks for overlaps or out of bounds
-      for(let index = 0; index < ship.length; index++)
-      {
-        if(row + index >= this.rows || this.grid[row + index][col] !== null)
-          return false;
-      }
-      //if everything passes, place the ship vertically
-      for(let index = 0; index < ship.length; index++){
-        this.grid[row + index][col] = ship;
-      }
-
-    } else{
-       return "Invalid input";
-    }
-  }
 
   receiveAttack(x, y){
 
@@ -66,15 +85,9 @@ class Gameboard{
       this.grid[x][y] = "hit";
       return "hit";
 
-      // if(ship.isSunk())
-      // {
-      //   return `${ship.name} has been sunk`;
-      // } else {
-      //   return "Hit! Opponent's turn";
-      // }
-
     }
   }
+
   checkBoats(){
     const boats = new Set();
 
@@ -89,13 +102,20 @@ class Gameboard{
       }
     }
 
-    if(boats.size != 0)
+    return boats;
+  }
+
+  isGameOver(){
+    if(this.checkBoats().size == 0)
     {
-      return true
-    } else {
-      return false
+      return true;
+    }
+    else{
+      return false;
     }
   }
 }
+
+ 
 
 export default Gameboard;

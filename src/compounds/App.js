@@ -2,28 +2,19 @@ import Ship from "./Ship"
 import Gameboard from './Gameboard'
 import Player from './Player'
 
-const gameboardPlayer1 = new Gameboard(10,10);
-const gameboardPlayer2 = new Gameboard(10,10);
+const gameboardPlayer1 = new Gameboard();
+const gameboardPlayer2 = new Gameboard();
 
 const player1 = new Player("Gary", gameboardPlayer1, gameboardPlayer2, true);
 const player2 = new Player("computer", gameboardPlayer2, gameboardPlayer1, false);
 
-const ship1 = new Ship("Destroyer", 3);
-const ship2 = new Ship("Destroyer", 5);
-const ship3 = new Ship("Destroyer", 7);
-const ship4 = new Ship("Destroyer", 3);
-const ship5 = new Ship("Destroyer", 5);
+// const ship1 = new Ship("Assault Ship", 3);
+// const ship2 = new Ship("Aircraft Carrier", 5);
+// const ship3 = new Ship("Destroyer", 7);
+// const ship4 = new Ship("Cruiser", 3);
+// const ship5 = new Ship("Combat Ship", 5);
 
-player1.placeShip(ship1, 0, 0, "horizontal");
-player1.placeShip(ship2, 5, 5, "vertical");
-player1.placeShip(ship3, 2, 2, "horizontal");
-player1.placeShip(ship4, 4, 0, "horizontal");
-player1.placeShip(ship5, 9, 2, "vertical");
-player2.placeShip(ship1, 0, 0, "horizontal");
-player2.placeShip(ship2, 5, 5, "vertical");
-player2.placeShip(ship3, 2, 2, "horizontal");
-player2.placeShip(ship4, 4, 0, "horizontal");
-player2.placeShip(ship5, 9, 2, "vertical");
+// player1.placeShip(ship1, 0, 0, "vertical");
 
 export default class App{
     static loadPage(){
@@ -34,7 +25,7 @@ export default class App{
         body.appendChild(this.loadDOM());
 
         this.handler();
-        this.plotShips(player1.board);
+     
     }
     static loadBanner(){
         const container = document.createElement("div");
@@ -55,12 +46,10 @@ export default class App{
         const buttons = document.createElement("div");
         buttons.className = "buttons-container"
 
-        const startBtn = document.createElement("button");
-        startBtn.textContent = "Start Game";
-        buttons.appendChild(startBtn);
-
+        buttons.innerHTML = `<button id="start-battleship" type="button">Start Game</button>`
         return buttons;
     }
+
     
     static loadDOM(){
         const content = document.createElement("div");
@@ -80,7 +69,6 @@ export default class App{
         container.appendChild(this.loadGrid(player.board, id));
         container.appendChild(title);
 
-
         return container;
     }
     static loadGrid(gameboard, id){
@@ -90,26 +78,20 @@ export default class App{
         container.className = "gameboard";
         container.setAttribute("id", id)
 
-        for (let i = 0; i < getGameboard.cols; i++)
+        for (let i = 0; i < getGameboard.rows; i++)
         {
-            for (let j = 0; j<getGameboard.rows; j++)
+            for (let j = 0; j<getGameboard.cols; j++)
             {
                 const square = document.createElement("div");
                 square.className = "square";
 
-                // if(gameboard.grid[i][j] !== null)
-                // {
-                //     square.classList.add("ship");
-                // }
                 square.setAttribute("row", i);
                 square.setAttribute("col", j);
 
                 container.appendChild(square);
             }
         }
-
         return container;
-
     }
 
     static plotShips(gameboard){
@@ -118,14 +100,40 @@ export default class App{
         getSquares.forEach((item) =>{
             const col = item.getAttribute("col");
             const row = item.getAttribute("row");
-            if(gameboard.grid[col][row] !== null)
+            if(gameboard.grid[row][col] !== null)
             {
                 item.classList.add("ship");
             }
         })
     }
+    static updateGameBoard(){
+        const getSquares = document.getElementById("player1").childNodes;
+
+        getSquares.forEach((item) => {
+            const col = item.getAttribute("col");
+            const row = item.getAttribute("row");
+            if(player1.board.grid[col][row] == "hit")
+            {
+                item.classList.remove("ship");
+                item.classList.add("hit");
+            } else if(player1.board.grid[col][row] == "miss")
+            {
+                item.classList.add("miss");
+            }
+        });
+    }
 
     static handler(){
+
+        const button = document.getElementById("start-battleship");
+
+        button.addEventListener(("click"), () =>{
+            player1.placeRandomToBoard();
+            player2.placeRandomToBoard();
+            this.plotShips(player1.board);
+
+        })
+
 
         const move = (e) =>{
             const square = e.currentTarget;
@@ -136,16 +144,29 @@ export default class App{
 
             if(player1.opponentBoard.grid[col][row] === "hit"){
                 square.classList.add("hit");
+
+                 //checks if game over
+                if(!player1.opponentBoard.isGameOver())
+                {
+                    player2.randomAttack();
+                    this.updateGameBoard();
+                } else{
+                    console.log("Game over");
+                }
+              
             } else if(player1.opponentBoard.grid[col][row] === "miss")
             {
                 square.classList.add("miss");
+                player2.randomAttack();
+                this.updateGameBoard();
+
             } else{
                 console.log("error");
             }
-
+           
             square.removeEventListener(("click"), move);
         }
-        const squares = document.querySelectorAll(".square");
+        const squares = document.getElementById("player2").childNodes;
         squares.forEach((square) =>{
             square.addEventListener(("click"), move);
         })
