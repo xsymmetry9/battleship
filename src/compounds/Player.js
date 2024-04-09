@@ -1,5 +1,8 @@
 import Ship from './Ship';
 
+const generateNumber = (num) =>{
+  return Math.floor(Math.random() * num);
+}
 class Player {
   constructor(name, gameboard, opponentBoard, isHuman)
   {
@@ -18,12 +21,8 @@ class Player {
 
   generateCoordinates()
   {
-    const random = (num) =>{
-      return Math.floor(Math.random() * num);
-    }
-
-    let col = random(this.opponentBoard.cols);
-    let row = random(this.opponentBoard.rows);
+    let col = generateNumber(this.opponentBoard.cols);
+    let row = generateNumber(this.opponentBoard.rows);
 
     return [col, row];
   }
@@ -55,24 +54,21 @@ class Player {
   attack(row, col){
     this.opponentBoard.receiveAttack(row, col);
 
-    return this.opponentBoard.grid[row][col];
+    return `Coordindates: ${[row, col]} ${this.opponentBoard.grid[row][col]}`;
   }
-
   randomAttack(){
-    let coordinates;
-    const random = () =>{
-      let row = Math.floor(Math.random() * this.opponentBoard.cols);
-      let col = Math.floor(Math.random() * this.opponentBoard.rows);
+    const findValidRandomCoordinates = () =>{
+      const randomCoordinates = this.generateCoordinates();
 
-      if (this.opponentBoard.grid[row][col] !== "miss" && this.opponentBoard.grid[row][col] !== "hit" )
+      if (this.opponentBoard.grid[randomCoordinates[0]][randomCoordinates[1]] !== "miss" && this.opponentBoard.grid[randomCoordinates[0]][randomCoordinates[1]] !== "hit" )
       {
-        return [row, col];
+        return randomCoordinates;
       } else{
-        return random();
+        return findValidRandomCoordinates();
       }
     }
 
-    coordinates = random();
+    const coordinates = findValidRandomCoordinates();
 
     const row = coordinates[0];
     const col = coordinates[1];

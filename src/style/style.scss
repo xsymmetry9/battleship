@@ -1,8 +1,4 @@
-$body-color: green;
-$bg-color: #EEEEEE;
-$dark: #31363F;
-$color-font-dark: #222831;
-$miss: #41C9E2;
+@use 'base.scss';
 
 *{
   padding: 0;
@@ -10,8 +6,8 @@ $miss: #41C9E2;
   box-sizing: border-box;
 }
 body{
-  color: $color-font-dark;
-    background-color: $bg-color;
+  color: base.$color-font-dark;
+  background-color: base.$bg-color;
 }
 h1{
   text-align: center;
@@ -29,22 +25,26 @@ h2{
 .display-wrapper{
   display: grid;
   padding: 1rem;
-  border: 1px solid $dark;
+  border: 1px solid base.$dark;
 }
 
 .buttons-container{
   display: flex;
   justify-content: center;
   padding: 3rem;
-}
+  gap: 1.2rem;
 
-.buttons-container button{
-  cursor: pointer;
-  background-color: transparent;
-  padding: .6rem 1.2rem;
-  border: 1px solid $dark;
+  button{
+    cursor: pointer;
+    background-color: transparent;
+    padding: .6rem 1.2rem;
+    border: 1px solid base.$dark;
+  }
+  button:hover{
+    background-color: base.$dark;
+    color: base.$light;
+  }
 }
-
 
 .boards-container{
   justify-content: center;
@@ -64,7 +64,7 @@ h2{
 }
 
 .square{
-  border: 1px solid $dark;
+  border: 1px solid base.$dark;
 }
 .square:hover{
   cursor: pointer;
@@ -72,12 +72,26 @@ h2{
 }
 
 .ship{
-  background-color: $dark;
+  background-color: base.$dark;
 }
 
 .hit{
   background-color: green;
 }
 .miss{
-  background-color: $miss;
+  background-color: base.$miss;
+}
+
+.message-log-container{
+  padding: 2.5rem 0;
+}
+
+.message-log-box{
+  display: flex;
+  border: 3px solid base.$dark;
+  width: 100%;
+  max-width: 500px;
+  height: 100px;
+  margin-inline: auto;
+  padding: .4rem .5rem;
 }

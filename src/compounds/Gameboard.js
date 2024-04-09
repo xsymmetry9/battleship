@@ -70,8 +70,8 @@ class Gameboard{
       } 
     } 
 
-
   receiveAttack(x, y){
+    
 
     if(x >= this.cols || y >=this.rows )
       return "out of bounds";
@@ -84,7 +84,6 @@ class Gameboard{
       ship.hit();
       this.grid[x][y] = "hit";
       return "hit";
-
     }
   }
 

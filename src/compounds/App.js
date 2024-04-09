@@ -8,14 +8,6 @@ const gameboardPlayer2 = new Gameboard();
 const player1 = new Player("Gary", gameboardPlayer1, gameboardPlayer2, true);
 const player2 = new Player("computer", gameboardPlayer2, gameboardPlayer1, false);
 
-// const ship1 = new Ship("Assault Ship", 3);
-// const ship2 = new Ship("Aircraft Carrier", 5);
-// const ship3 = new Ship("Destroyer", 7);
-// const ship4 = new Ship("Cruiser", 3);
-// const ship5 = new Ship("Combat Ship", 5);
-
-// player1.placeShip(ship1, 0, 0, "vertical");
-
 export default class App{
     static loadPage(){
         const body = document.getElementById("root");
@@ -23,8 +15,11 @@ export default class App{
         body.appendChild(this.loadBanner());
         body.appendChild(this.loadButtons());
         body.appendChild(this.loadDOM());
+        body.appendChild(this.loadMessageLog());
 
         this.handler();
+
+
      
     }
     static loadBanner(){
@@ -46,11 +41,17 @@ export default class App{
         const buttons = document.createElement("div");
         buttons.className = "buttons-container"
 
-        buttons.innerHTML = `<button id="start-battleship" type="button">Start Game</button>`
+        buttons.innerHTML = `
+            <button id="start-battleship" type="button">Start Game</button>
+            <button id="reset-battleship" type="button">Reset</button>
+        `
         return buttons;
     }
 
-    
+    static loadNewGameButton(){
+
+    }
+
     static loadDOM(){
         const content = document.createElement("div");
         content.className = "boards-container"
@@ -60,19 +61,37 @@ export default class App{
         return content;
     }
 
+    static loadMessageLog(){
+        const container = document.createElement("div");
+        container.className = "message-log-container";
+
+        const box = document.createElement("div");
+        box.className = "message-log-box";
+        box.innerHTML = `<p id="message-log">Test</p>`;
+
+        container.appendChild(box);
+
+        return container;
+    }
+
+    static sendMessage(message){
+        const p = document.getElementById("message-log");
+        p.textContent = message;
+    }
+
     static loadPlayer(player, id){
         const container = document.createElement("div");
         
         const title = document.createElement("h2");
         title.textContent = player.name;
 
-        container.appendChild(this.loadGrid(player.board, id));
+        container.appendChild(this.loadGrid(player, id));
         container.appendChild(title);
 
         return container;
     }
-    static loadGrid(gameboard, id){
-        const getGameboard = gameboard;
+    static loadGrid(player, id){
+        const getGameboard = player.board;
 
         const container = document.createElement("div");
         container.className = "gameboard";
@@ -87,6 +106,7 @@ export default class App{
 
                 square.setAttribute("row", i);
                 square.setAttribute("col", j);
+                square.setAttribute("id", `${player.name}-${i}-${j}`)
 
                 container.appendChild(square);
             }
@@ -125,33 +145,22 @@ export default class App{
 
     static handler(){
 
-        const button = document.getElementById("start-battleship");
-
-        button.addEventListener(("click"), () =>{
-            player1.placeRandomToBoard();
-            player2.placeRandomToBoard();
-            this.plotShips(player1.board);
-
-        })
-
-
         const move = (e) =>{
             const square = e.currentTarget;
             const col = square.getAttribute("col");
             const row = square.getAttribute("row");
 
-            player1.attack(col, row);
+            this.sendMessage(player1.attack(col, row));
 
             if(player1.opponentBoard.grid[col][row] === "hit"){
                 square.classList.add("hit");
-
                  //checks if game over
                 if(!player1.opponentBoard.isGameOver())
                 {
-                    player2.randomAttack();
+                    this.sendMessage(player2.randomAttack());
                     this.updateGameBoard();
                 } else{
-                    console.log("Game over");
+                    removeHandler();
                 }
               
             } else if(player1.opponentBoard.grid[col][row] === "miss")
@@ -166,10 +175,56 @@ export default class App{
            
             square.removeEventListener(("click"), move);
         }
-        const squares = document.getElementById("player2").childNodes;
-        squares.forEach((square) =>{
-            square.addEventListener(("click"), move);
-        })
+
+        const addHandler = ()=>{
+            const squares = document.getElementById("player2").childNodes;
+            squares.forEach((square) =>{
+                square.addEventListener(("click"), move);
+            });
+        }
+
+        const removeHandler = () => {
+            const getChildren = document.getElementById("player2").childNodes;
+            getChildren.forEach((square) =>{
+                square.removeEventListener(("click"), move);
+            });
+        }
+
+        const startBtn = document.getElementById("start-battleship");
+        const resetBtn = document.getElementById("reset-battleship");
+
+        const start = () =>{
+            addHandler();
+
+            this.sendMessage("Player 1 moves first");
+            player1.placeRandomToBoard();
+            player2.placeRandomToBoard();
+            this.plotShips(player1.board);   
+            startBtn.removeEventListener(("click"), start);
+        }
+
+        const removeRender = (player) =>{
+            const squares = document.getElementById(player).childNodes;
+            squares.forEach((square) => {square.className = "square"});
+
+        }
+
+        const reset = () =>{
+            player1.board.clearGrid();
+            player2.board.clearGrid();
+            removeHandler();
+            removeRender("player1");
+            removeRender("player2");
+
+            this.sendMessage("Press Start.")
+
+            startBtn.addEventListener(("click"), start);
+        }
+
+        startBtn.addEventListener(("click"), start);
+        resetBtn.addEventListener(("click"), reset);
+
+   
     }
 
 }
