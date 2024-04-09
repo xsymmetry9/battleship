@@ -52,9 +52,7 @@ class Player {
   }
 
   attack(row, col){
-    this.opponentBoard.receiveAttack(row, col);
-
-    return `Coordindates: ${[row, col]} ${this.opponentBoard.grid[row][col]}`;
+    return this.opponentBoard.receiveAttack(row, col);
   }
   randomAttack(){
     const findValidRandomCoordinates = () =>{
