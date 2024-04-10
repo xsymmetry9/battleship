@@ -5,15 +5,17 @@ class Gameboard{
     this.grid = this.createGrid();
     this.boats = this.checkBoats();
   }
-
+  //Creates a grid
   createGrid(){
     return Array.from({ length: this.rows }, () => Array(this.cols).fill(null));
   }
 
+  //Clears the board.
   clearGrid(){
     this.grid.forEach(row => row.fill(null));
   }
 
+  //Checks if there are any ships on the board and if it fits.
   isValid(ship, row, col, direction){
     if(direction === "horizontal"){
       if(col + ship.length > this.cols)
@@ -50,7 +52,7 @@ class Gameboard{
     return false //"Invalid direction"; //invalid name
     }
   }
-
+//Places the ship on the board.
   placeShip(ship, row, col, direction){
     if(!this.isValid(ship, row, col, direction))
     return;

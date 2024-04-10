@@ -1,3 +1,4 @@
+//Generates random number depending on the number of columns and rows.
 const generateNumber = (max) =>{
     return Math.floor(Math.random() * max);
 }
@@ -10,6 +11,7 @@ const generateCoordinates = (gameboard) =>{
     return [col, row];
 }
 
+//Generate a random placement on the board.
 const randomPlacement = (gameboard, ship) =>{
     const coordinates = generateCoordinates(gameboard);
     const direction = Math.random() < 0.5 ? "vertical": "horizontal";
@@ -17,7 +19,6 @@ const randomPlacement = (gameboard, ship) =>{
     if (gameboard.isValid(ship, coordinates[0], coordinates[1], direction))
     {
       gameboard.placeShip(ship, coordinates[0], coordinates[1], direction);
-    //   array.push({"ship": ship.name, "row": coordinates[0], "col": coordinates[1], "direction": direction});
     } else {
       randomPlacement(gameboard, ship);
     }
