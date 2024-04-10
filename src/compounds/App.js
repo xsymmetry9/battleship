@@ -75,8 +75,8 @@ export default class App{
     }
 
     static sendMessage(message){
-        const p = document.getElementById("message-log");
-        p.textContent = message;
+        const box = document.querySelector(".message-log-box");
+        box.innerHTML += `<p>${message}</p>`;
     }
 
     static loadPlayer(player, id){
