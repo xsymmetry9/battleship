@@ -1,9 +1,6 @@
 import Ship from './Ship';
-import {randomAttack} from './Random';
+import {randomAttack, randomPlacement} from './Random';
 
-const generateNumber = (num) =>{
-  return Math.floor(Math.random() * num);
-}
 class Player {
   constructor(name, gameboard, opponentBoard, isHuman)
   {
@@ -19,65 +16,30 @@ class Player {
       new Ship("Combat Ship", 1)   
     ];
   }
-
-  generateCoordinates()
-  {
-    let col = generateNumber(this.opponentBoard.cols);
-    let row = generateNumber(this.opponentBoard.rows);
-
-    return [col, row];
-  }
-
+  //Places ships randomly on the board.
   placeRandomToBoard(){
-    const array = [];
-
-    const placeShip = (ship) =>{
-      const coordinates = this.generateCoordinates();
-      const direction = Math.random() < 0.5 ? "vertical": "horizontal";
-
-      if (this.board.isValid(ship, coordinates[0], coordinates[1], direction))
-      {
-        this.placeShip(ship, coordinates[0], coordinates[1], direction);
-        array.push({"ship": ship.name, "row": coordinates[0], "col": coordinates[1], "direction": direction});
-      } else {
-        placeShip(ship);
-      }
-    };
-    this.ships.forEach(placeShip);
-    return array;
+    this.ships.forEach((ship) => {
+      randomPlacement(this.board, ship);
+    });
+    return this.ships;
   }
-
+//A function that places ships on the board manually.
   placeShip(ship, row, col, orientation)
   {
     return this.board.placeShip(ship, row, col, orientation);
   }
-
+//Player chooses to attack on the opponent's board.
   attack(row, col){
     return `${this.name} attacks and it ${this.opponentBoard.receiveAttack(row, col)} at [${row}, ${col}].`;
   }
+//Player chooses to attack randomly on the opponent's board.
   randomAttack(){
-    // const findValidRandomCoordinates = (count = 0) =>{
-    //   const randomCoordinates = this.generateCoordinates();
-
-    //   if (this.opponentBoard.grid[randomCoordinates[0]][randomCoordinates[1]] !== "miss" && this.opponentBoard.grid[randomCoordinates[0]][randomCoordinates[1]] !== "hit" )
-    //   {
-    //     console.log(count);
-    //     return randomCoordinates;
-    //   } else{
-    //     count++;
-    //     return findValidRandomCoordinates(count);
-    //   }
-    // }
-
     const coordinates = randomAttack(this.opponentBoard);
-    // const coordinates = findValidRandomCoordinates();
-
     const row = coordinates[0];
     const col = coordinates[1];
 
     return this.attack(row, col);
   }
- 
 }
 
 export default Player;
