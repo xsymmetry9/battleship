@@ -3,7 +3,7 @@ class Gameboard{
   constructor() {
     this.rows = 10; 
     this.cols = 10;
-    this.grid = this.createGrid();
+    this.grid = Array.from({ length: this.rows }, () => Array(this.cols).fill(null));
     this.ships = [
       new Ship("Assault Ship", 3),
       new Ship("Aircraft Carrier", 5),
@@ -12,16 +12,11 @@ class Gameboard{
       new Ship("Combat Ship", 1)   
     ];
   }
-  //Creates a grid
-  createGrid(){
-    return Array.from({ length: this.rows }, () => Array(this.cols).fill(null));
-  }
 
   //Clears the board.
   clearGrid(){
     this.grid.forEach(row => row.fill(null));
   }
-
   //Checks if there are any ships on the board and if it fits.
   isValid(ship, row, col, direction){
     if(direction === "horizontal"){
