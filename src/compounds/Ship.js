@@ -13,9 +13,13 @@ class Ship{
   }
 
   isSunk(){
-    if(this.hits >= this.length){
-      return true;
+
+    if((this.length - this.hits) === 0)
+    {
+      console.log(`${this.name} has been sunk`);
+      return true 
     } else {
+      console.log(`${this.name} has been hit ${this.hits} time.`);
       return false;
     }
   }

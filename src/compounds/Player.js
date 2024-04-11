@@ -8,20 +8,14 @@ class Player {
     this.board = gameboard;
     this.opponentBoard = opponentBoard;
     this.isHuman = isHuman;
-    this.ships = [
-      new Ship("Assault Ship", 3),
-      new Ship("Aircraft Carrier", 5),
-      new Ship("Destroyer", 7),
-      new Ship("Cruiser", 3),
-      new Ship("Combat Ship", 1)   
-    ];
+
   }
   //Places ships randomly on the board.
   placeRandomToBoard(){
-    this.ships.forEach((ship) => {
+    this.board.ships.forEach((ship) => {
       randomPlacement(this.board, ship);
     });
-    return this.ships;
+    return this.opponentBoard.ships;
   }
 //A function that places ships on the board manually.
   placeShip(ship, row, col, orientation)

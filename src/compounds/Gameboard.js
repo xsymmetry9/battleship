@@ -1,9 +1,16 @@
+import Ship from './Ship';
 class Gameboard{
   constructor() {
     this.rows = 10; 
     this.cols = 10;
     this.grid = this.createGrid();
-    this.boats = this.checkBoats();
+    this.ships = [
+      new Ship("Assault Ship", 3),
+      new Ship("Aircraft Carrier", 5),
+      new Ship("Destroyer", 7),
+      new Ship("Cruiser", 3),
+      new Ship("Combat Ship", 1)   
+    ];
   }
   //Creates a grid
   createGrid(){
@@ -71,7 +78,7 @@ class Gameboard{
         }
       } 
     } 
-
+  //Places an attack on the board.
   receiveAttack(x, y){
     
     if(x >= this.cols || y >=this.rows )
@@ -83,36 +90,34 @@ class Gameboard{
     } else{
       const ship = this.grid[x][y];
       ship.hit();
+      ship.isSunk();
       this.grid[x][y] = "hit";
       return "hit";
     }
   }
-
-  checkBoats(){
-    const boats = new Set();
-
-    for(let i = 0; i<this.rows; i++)
-    {
-      for(let j = 0; j<this.cols; j++)
-      {
-        if(this.grid[i][j] !== null && this.grid[i][j] !== "hit" && this.grid[i][j] !== "miss")
-        {
-          boats.add(this.grid[i][j]);
-        }
-      }
-    }
-
-    return boats;
+  getMaxHits(){
+    let sum = 0;
+    this.ships.forEach(ship =>{
+      sum+= ship.length;
+    });
+    return sum;
+  }
+  getHits(){
+    let sum = 0;
+    this.ships.forEach(ship =>{
+      sum+= ship.hits;
+    });
+    return sum;
   }
 
+  checksDifference(){
+    return this.getMaxHits() - this.getHits();
+  }
+
+  //Checks if the game is over.
   isGameOver(){
-    if(this.checkBoats().size == 0)
-    {
-      return true;
-    }
-    else{
-      return false;
-    }
+    console.log(this.checksDifference());
+    return this.checksDifference() === 0 ? true : false;
   }
 }
 

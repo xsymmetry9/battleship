@@ -155,14 +155,14 @@ export default class App{
             if(player1.opponentBoard.grid[col][row] === "hit"){
                 square.classList.add("hit");
 
-                console.log(player2.ships);
                  //checks if game over
-                if(!player1.opponentBoard.isGameOver())
+                if(player1.opponentBoard.isGameOver())
                 {
+                    alert("Game over");
+                    removeHandler();
+                } else{
                     this.sendMessage(player2.randomAttack());
                     this.updateGameBoard();
-                } else{
-                    removeHandler();
                 }
               
             } else if(player1.opponentBoard.grid[col][row] === "miss")
