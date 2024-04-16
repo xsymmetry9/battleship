@@ -19,8 +19,6 @@ export default class App{
 
         this.handler();
 
-
-     
     }
     static loadBanner(){
         const container = document.createElement("div");
@@ -43,7 +41,7 @@ export default class App{
 
         buttons.innerHTML = `
             <button id="start-battleship" type="button">Start Game</button>
-            <button id="reset-battleship" type="button">Reset</button>
+            <button id="reset-battleship" class="hidden" type="button">Reset</button>
         `
         return buttons;
     }
@@ -56,8 +54,10 @@ export default class App{
         const content = document.createElement("div");
         content.className = "boards-container"
 
-        content.appendChild(this.loadPlayer(player1, "player1"));
-        content.appendChild(this.loadPlayer(player2, "player2"));
+        content.appendChild(this.loadShips(player1));
+        content.appendChild(this.loadBoard(player1, "player1"));
+        content.appendChild(this.loadBoard(player2, "player2"));
+
         return content;
     }
 
@@ -74,20 +74,67 @@ export default class App{
         return container;
     }
 
+    // static sendMessage(message){
+    //     const box = document.querySelector(".message-log-box");
+    //     box.innerHTML += `<p>${message}</p>`;
+    // }
     static sendMessage(message){
-        const box = document.querySelector(".message-log-box");
-        box.innerHTML += `<p>${message}</p>`;
+        const box = document.querySelector(".display-wrapper h2");
+        box.textContent = message;
     }
 
-    static loadPlayer(player, id){
+    static loadBoard(player, id){
         const container = document.createElement("div");
-        
-        const title = document.createElement("h2");
-        title.textContent = player.name;
 
         container.appendChild(this.loadGrid(player, id));
-        container.appendChild(title);
+        return container;
+    }
 
+    static loadShips(player){
+        const container = document.createElement("div");
+        container.className = "ship-buttons";
+        
+        player.board.ships.forEach((ship) => {
+            const createShips = document.createElement("div");
+            createShips.className = "ship-btn-container";
+            const createBtn = document.createElement("button");
+            createBtn.className = "ship-btn";
+            createBtn.setAttribute("id", ship.id);
+            createBtn.setAttribute("value", ship.name);
+
+            createBtn.addEventListener(("click"), e =>{
+
+                console.log(e.currentTarget.value);
+                
+                const ship = player.board.getShip(e.currentTarget.value);
+                console.log(ship);
+
+
+                // console.log(player.board.getShip(e.currentTarget.value));
+                const getSquares = document.getElementById("player1").childNodes;
+                getSquares.forEach((item) =>{
+
+                    item.addEventListener(("click"), e =>{
+                        const col = parseInt(e.currentTarget.getAttribute("col"));
+                        const row = parseInt(e.currentTarget.getAttribute("row"));
+
+                        console.log(player.board.placeShip(ship, row, col, "vertical"));
+                   })
+                    // const col = item.getAttribute("col");
+                    // const row = item.getAttribute("row");
+                    // if(player.board.grid[row][col] !== null)
+                    // {
+                    //     item.classList.add("ship");
+                    // }
+                });
+
+            });
+            createBtn.textContent = ship.name;
+
+            createShips.appendChild(createBtn);
+
+            container.appendChild(createShips);
+        })
         return container;
     }
     static loadGrid(player, id){
@@ -138,38 +185,41 @@ export default class App{
                 item.classList.add("hit");
             } else if(player1.board.grid[col][row] == "miss")
             {
-                item.classList.add("miss");
             }
         });
     }
 
     static handler(){
+        const startBtn = document.getElementById("start-battleship");
+        const resetBtn = document.getElementById("reset-battleship");
+        const content = document.querySelector(".boards-container");
+        const getShipBtns = document.querySelector(".ship-buttons");
 
         const move = (e) =>{
             const square = e.currentTarget;
             const col = square.getAttribute("col");
             const row = square.getAttribute("row");
 
-            this.sendMessage(player1.attack(col, row));
-
+            this.sendMessage(player1.attack(row, col)); //players chooses to go
             if(player1.opponentBoard.grid[col][row] === "hit"){
-                square.classList.add("hit");
-
                  //checks if game over
                 if(player1.opponentBoard.isGameOver())
                 {
                     alert("Game over");
                     removeHandler();
                 } else{
-                    this.sendMessage(player2.randomAttack());
-                    this.updateGameBoard();
+                    setTimeout(() =>{
+                        this.sendMessage((player2.randomAttack()));
+                        this.updateGameBoard();
+                    }, 3000);
                 }
               
             } else if(player1.opponentBoard.grid[col][row] === "miss")
-            {
-                square.classList.add("miss");
-                this.sendMessage(player2.randomAttack());
-                this.updateGameBoard();
+            {    
+                setTimeout(() =>{
+                    this.sendMessage((player2.randomAttack()));
+                    this.updateGameBoard();
+                }, 3000);
 
             } else{
                 console.log("error");
@@ -192,17 +242,18 @@ export default class App{
             });
         }
 
-        const startBtn = document.getElementById("start-battleship");
-        const resetBtn = document.getElementById("reset-battleship");
-
         const start = () =>{
-            addHandler();
 
+            
+            addHandler();
+            getShipBtns.classList.add("hidden");
             this.sendMessage("Player 1 moves first");
             player1.placeRandomToBoard();
             player2.placeRandomToBoard();
             this.plotShips(player1.board);   
             startBtn.removeEventListener(("click"), start);
+            startBtn.classList.add("hidden");
+            resetBtn.classList.remove("hidden");
         }
 
         const removeRender = (player) =>{
@@ -221,6 +272,10 @@ export default class App{
             this.sendMessage("Press Start.")
 
             startBtn.addEventListener(("click"), start);
+            startBtn.classList.remove("hidden");
+            resetBtn.classList.add("hidden");
+            getShipBtns.classList.remove("hidden");
+
         }
 
         startBtn.addEventListener(("click"), start);

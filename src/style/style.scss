@@ -17,6 +17,17 @@ h2{
   text-align: center;
   font-size: 2rem;
 }
+
+button{
+  cursor: pointer;
+  background-color: transparent;
+  padding: .6rem 1.2rem;
+  border: 1px solid base.$dark;
+}
+button:hover{
+  background-color: base.$dark;
+  color: base.$light;
+}
 .banner{
   display: flex;
   justify-content: center;
@@ -33,17 +44,6 @@ h2{
   justify-content: center;
   padding: 3rem;
   gap: 1.2rem;
-
-  button{
-    cursor: pointer;
-    background-color: transparent;
-    padding: .6rem 1.2rem;
-    border: 1px solid base.$dark;
-  }
-  button:hover{
-    background-color: base.$dark;
-    color: base.$light;
-  }
 }
 
 .boards-container{
@@ -61,7 +61,6 @@ h2{
   height: 400px;
   width: 400px;
   gap: 2px;
-  
 }
 
 .square{
@@ -95,4 +94,25 @@ h2{
   margin-inline: auto;
   padding: .4rem .5rem;
   overflow-y: scroll;
+}
+.ship-buttons{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  .ship-btn-container{
+    width: 150px;
+    button{
+      width: 100%;
+    }
+  }
+  @media (max-width: 55em)
+  {
+    flex-direction: row;
+  }
+}
+
+.hidden{
+  display: none;
 }

@@ -72,9 +72,22 @@ class Gameboard{
           this.grid[row + index][col] = ship;
         }
       } 
+
+      return this.grid;
     } 
+    getShip(shipName){
+      let result;
+      this.ships.forEach((ship) => {
+        if(ship.name === shipName) {
+          result = ship;
+        } else {
+          return "ship not found";
+        }
+      });
+      return result;
+    }
   //Places an attack on the board.
-  receiveAttack(x, y){
+  receiveAttack(receiver, x, y){
     
     if(x >= this.cols || y >=this.rows )
       return "out of bounds";
@@ -114,6 +127,10 @@ class Gameboard{
     console.log(this.checksDifference());
     return this.checksDifference() === 0 ? true : false;
   }
+
+  //Plots hits
+
+  //Plots miss
 }
 
  

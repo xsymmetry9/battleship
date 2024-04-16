@@ -23,7 +23,20 @@ class Player {
   }
 //Player chooses to attack on the opponent's board.
   attack(row, col){
-    return `${this.name} attacks and it ${this.opponentBoard.receiveAttack(row, col)} at [${row}, ${col}].`;
+    const plot = document.getElementById(`${this.name}-${row}-${col}`);
+
+    console.log(`${row}-${col}`);
+    console.log(plot);
+
+
+    if(this.opponentBoard.receiveAttack(this.opponentBoard, row, col) === "hit")
+    {
+      plot.classList.add("hit");
+      return `${this.name} had a good hit`; 
+    } else {
+      plot.classList.add("miss");
+      return `${this.name} missed`;
+    };
   }
 //Player chooses to attack randomly on the opponent's board.
   randomAttack(){
