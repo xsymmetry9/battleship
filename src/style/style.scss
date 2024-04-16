@@ -24,7 +24,7 @@ button{
   padding: .6rem 1.2rem;
   border: 1px solid base.$dark;
 }
-button:hover{
+button:hover, button:focus{
   background-color: base.$dark;
   color: base.$light;
 }
