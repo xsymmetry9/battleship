@@ -1,4 +1,5 @@
 import {randomAttack, randomPlacement} from './Random';
+import {plotShip} from './Plot';
 
 class Player {
   constructor(name, gameboard, opponentBoard, isHuman)
@@ -19,7 +20,14 @@ class Player {
 //A function that places ships on the board manually.
   placeShip(ship, row, col, orientation)
   {
-    return this.board.placeShip(ship, row, col, orientation);
+    if (!ship.deploy && this.board.placeShip(ship, row, col, orientation)){
+      plotShip(this.name, row, col, ship.length, orientation);
+      return this.board.grid;
+
+    } else {
+      return "Ship has already been deployed.  Tried again"
+    }
+
   }
 //Player chooses to attack on the opponent's board.
   attack(row, col){
