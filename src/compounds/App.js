@@ -90,59 +90,66 @@ export default class App{
         return container;
     }
 
-    static loadShips(player){
+    static handleSquareClick(e, ship, player) {
+        const col = parseInt(e.currentTarget.getAttribute("col"));
+        const row = parseInt(e.currentTarget.getAttribute("row"));
+        console.log(player.placeShip(ship, row, col, "horizontal"));
+    }
+
+    static handleLoadShipBtn = (e, player) =>{
+        const ship = player.board.getShip(e.currentTarget.value);
+        const getSquares = document.getElementById("player1").childNodes;
+
+        getSquares.forEach((item) => {
+            item.addEventListener("click", (e) => this.handleSquareClick(e, ship, player));
+        });
+    }
+
+    static loadShips(player) {
         const container = document.createElement("div");
         container.className = "ship-buttons";
-        
+
+        const horizontalBtn = document.createElement("button");
+        const verticalBtn = document.createElement("button");
+        horizontalBtn.textContent = "Horizontal";
+        verticalBtn.textContent = "Vertical";
+
+        horizontalBtn.classList.add("disabled");
+        verticalBtn.classList.add("disabled");
+
+    
         player.board.ships.forEach((ship) => {
             const createShips = document.createElement("div");
             createShips.className = "ship-btn-container";
+    
             const createBtn = document.createElement("button");
             createBtn.className = "ship-btn";
             createBtn.setAttribute("id", ship.id);
             createBtn.setAttribute("value", ship.name);
-
-            createBtn.addEventListener(("click"), e =>{
-
-                console.log(e.currentTarget.value);
-                
-                const ship = player.board.getShip(e.currentTarget.value);
-                console.log(ship);
-
-
-                // console.log(player.board.getShip(e.currentTarget.value));
-                const getSquares = document.getElementById("player1").childNodes;
-                getSquares.forEach((item) =>{
-
-                    item.addEventListener(("click"), e =>{
-                        const col = parseInt(e.currentTarget.getAttribute("col"));
-                        const row = parseInt(e.currentTarget.getAttribute("row"));
-
-                        console.log(player.board.placeShip(ship, row, col, "vertical"));
-                   })
-                    // const col = item.getAttribute("col");
-                    // const row = item.getAttribute("row");
-                    // if(player.board.grid[row][col] !== null)
-                    // {
-                    //     item.classList.add("ship");
-                    // }
-                });
-
-            });
             createBtn.textContent = ship.name;
 
+   
+    
+            createBtn.addEventListener("click", (e) => this.handleLoadShipBtn(e, player));
+    
+     
             createShips.appendChild(createBtn);
-
             container.appendChild(createShips);
-        })
+       
+        });
+    
+        container.appendChild(horizontalBtn);
+        container.appendChild(verticalBtn);
         return container;
+    
+
     }
     static loadGrid(player, id){
         const getGameboard = player.board;
 
         const container = document.createElement("div");
         container.className = "gameboard";
-        container.setAttribute("id", id)
+        container.setAttribute("id", id);
 
         for (let i = 0; i < getGameboard.rows; i++)
         {
@@ -153,7 +160,7 @@ export default class App{
 
                 square.setAttribute("row", i);
                 square.setAttribute("col", j);
-                square.setAttribute("id", `${player.name}-${i}-${j}`)
+                square.setAttribute("id", `${player.name.toLowerCase()}-${i}-${j}`);
 
                 container.appendChild(square);
             }
@@ -244,7 +251,7 @@ export default class App{
 
         const start = () =>{
 
-            
+
             addHandler();
             getShipBtns.classList.add("hidden");
             this.sendMessage("Player 1 moves first");
