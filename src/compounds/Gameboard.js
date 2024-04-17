@@ -57,7 +57,7 @@ class Gameboard{
 //Places the ship on the board.
   placeShip(ship, row, col, direction){
     if(!this.isValid(ship, row, col, direction))
-    return;
+    return ship.deploy;
     
     if(direction === "horizontal")
       {
@@ -66,14 +66,19 @@ class Gameboard{
          {
            this.grid[row][col + index] = ship;
         }
+        ship.deploy = true;
+        return ship.deploy;
       } else if(direction === "vertical"){ //direction is horizontal
         //if everything passes, place the ship vertically
         for(let index = 0; index < ship.length; index++){
           this.grid[row + index][col] = ship;
         }
-      } 
+        ship.deploy = true;
+        return ship.deploy;
+      } else {
+        return ship.deploy;
+      }
 
-      return this.grid;
     } 
     getShip(shipName){
       let result;
