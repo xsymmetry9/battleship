@@ -100,6 +100,8 @@ export default class App{
         const ship = player.board.getShip(e.currentTarget.value);
         const getSquares = document.getElementById("player1").childNodes;
 
+        
+
         getSquares.forEach((item) => {
             item.addEventListener("click", (e) => this.handleSquareClick(e, ship, player));
         });
