@@ -95,23 +95,7 @@ button:hover, button:focus{
   padding: .4rem .5rem;
   overflow-y: scroll;
 }
-.ship-buttons{
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  .ship-btn-container{
-    width: 150px;
-    button{
-      width: 100%;
-    }
-  }
-  @media (max-width: 55em)
-  {
-    flex-direction: row;
-  }
-}
+
 
 .hidden{
   display: none;
@@ -119,4 +103,36 @@ button:hover, button:focus{
 .disabled{
   background-color: gray;
   color: white;
+}
+
+.player-menu{
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  width: 150px;
+  button{
+    width: 100%;
+  }
+
+  .ship-buttons{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+
+  .ship-btn-container{
+    width: inherit;
+    }
+   
+  @media (max-width: 55em)
+    {
+    flex-direction: row;
+    }
+  }
+  .orientation-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }

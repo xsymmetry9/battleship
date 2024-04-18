@@ -52,9 +52,15 @@ export default class App{
 
     static loadDOM(){
         const content = document.createElement("div");
-        content.className = "boards-container"
+        content.className = "boards-container";
 
-        content.appendChild(this.loadShips(player1));
+        const handleBtnsContainer = document.createElement("div");
+        handleBtnsContainer.className = "player-menu";
+        
+        handleBtnsContainer.appendChild(this.loadShips(player1));
+        handleBtnsContainer.appendChild(this.loadOrientationBtns());
+
+        content.appendChild(handleBtnsContainer);
         content.appendChild(this.loadBoard(player1, "player1"));
         content.appendChild(this.loadBoard(player2, "player2"));
 
@@ -96,30 +102,64 @@ export default class App{
         console.log(player.placeShip(ship, row, col, "horizontal"));
     }
 
+    static handleOrientation = (ship) =>{
+        const orientationBtns = document.querySelectorAll(".orientation-btns");
+        orientationBtns.forEach((item) =>{
+            if(item.value !== ship.orientation)
+            {
+                item.classList.remove("disabled");
+                item.addEventListener(("click"), (e) => this.handleOrientationBtn(e, ship));
+            } else {
+                item.classList.add("disabled");
+            }
+        });
+    }
+
     static handleLoadShipBtn = (e, player) =>{
         const ship = player.board.getShip(e.currentTarget.value);
         const getSquares = document.getElementById("player1").childNodes;
 
-        
-
+        this.handleOrientation(ship);
+ 
         getSquares.forEach((item) => {
             item.addEventListener("click", (e) => this.handleSquareClick(e, ship, player));
         });
     }
 
+    static handleOrientationBtn = (e, ship) =>{
+        // ship.setOrientation = e.currentTarget.value;
+        ship.orientation = e.currentTarget.value;
+        console.log(ship);
+        e.currentTarget.classList.add("disabled");
+
+
+        const orientationBtns = document.querySelectorAll(".orientation-btns");
+        orientationBtns.forEach((item) =>{
+            if(item.value !== ship.orientation)
+            {
+                item.classList.remove("disabled");
+                item.addEventListener(("click"), (e) => this.handleOrientation(e, ship));
+            }
+        });
+
+        return e.currentTarget.value;
+    }
+
+    static loadOrientationBtns = () =>{
+        const container = document.createElement("div");
+        container.className = "orientation-container";
+
+        container.innerHTML = `
+        <button class="orientation-btns" id="horizontal-btn" value="horizontal">horizontal</button>
+        <button class="orientation-btns" id="vertical-btn" value="vertical">vertical</button>
+        `;
+        return container;
+    }
+
     static loadShips(player) {
         const container = document.createElement("div");
         container.className = "ship-buttons";
-
-        const horizontalBtn = document.createElement("button");
-        const verticalBtn = document.createElement("button");
-        horizontalBtn.textContent = "Horizontal";
-        verticalBtn.textContent = "Vertical";
-
-        horizontalBtn.classList.add("disabled");
-        verticalBtn.classList.add("disabled");
-
-    
+   
         player.board.ships.forEach((ship) => {
             const createShips = document.createElement("div");
             createShips.className = "ship-btn-container";
@@ -135,13 +175,13 @@ export default class App{
             createBtn.addEventListener("click", (e) => this.handleLoadShipBtn(e, player));
     
      
+
             createShips.appendChild(createBtn);
             container.appendChild(createShips);
+
        
         });
-    
-        container.appendChild(horizontalBtn);
-        container.appendChild(verticalBtn);
+
         return container;
     
 

@@ -18,8 +18,8 @@ class Gameboard{
     this.grid.forEach(row => row.fill(null));
   }
   //Checks if there are any ships on the board and if it fits.
-  isValid(ship, row, col, direction){
-    if(direction === "horizontal"){
+  isValid(ship, row, col){
+    if(ship.orientation === "horizontal"){
       if(col + ship.length > this.cols)
       {
         return false // "Error: Ship doesn't fit horizontally.";
@@ -35,7 +35,7 @@ class Gameboard{
         return true; //Pass all test
       }
         
-    } else if(direction === "vertical") {
+    } else if(ship.orientation === "vertical") {
         if(row + ship.length > this.rows) {
           return false //"Ship doesn't fit vertically"; //Ship doesn't fit.
           } else {
@@ -55,11 +55,11 @@ class Gameboard{
     }
   }
 //Places the ship on the board.
-  placeShip(ship, row, col, direction){
-    if(!this.isValid(ship, row, col, direction))
+  placeShip(ship, row, col){
+    if(!this.isValid(ship, row, col))
     return ship.deploy;
     
-    if(direction === "horizontal")
+    if(ship.orientation === "horizontal")
       {
         //checks for overlaps or out of bounds
         for(let index = 0; index < ship.length; index++)
@@ -68,7 +68,7 @@ class Gameboard{
         }
         ship.deploy = true;
         return ship.deploy;
-      } else if(direction === "vertical"){ //direction is horizontal
+      } else if(ship.orientation === "vertical"){ //direction is horizontal
         //if everything passes, place the ship vertically
         for(let index = 0; index < ship.length; index++){
           this.grid[row + index][col] = ship;
@@ -92,7 +92,7 @@ class Gameboard{
       return result;
     }
   //Places an attack on the board.
-  receiveAttack(receiver, x, y){
+  receiveAttack(x, y){
     
     if(x >= this.cols || y >=this.rows )
       return "out of bounds";

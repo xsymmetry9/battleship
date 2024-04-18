@@ -13,11 +13,13 @@ const plotShip = (name, row, col, length, orientation) =>{
             createId.addEventListener(("click"), e =>{console.log(e.currentTarget)});
             createId.classList.add("ship");
         }
-    } else {
+    } else if(orientation === "vertical") {
         for(let index = 0; index < length; index++){
-            const createId = document.getElementById(`${name.toLowerCase()}-${row +index}`);
+            const createId = document.getElementById(`${name.toLowerCase()}-${row + index}-${col}`);
             createId.classList.add("ship");
         }
+    } else {
+        return "Plotting didn't work."
     }
 }
 
