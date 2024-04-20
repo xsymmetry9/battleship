@@ -15,10 +15,11 @@ const generateCoordinates = (gameboard) =>{
 const randomPlacement = (gameboard, ship) =>{
     const coordinates = generateCoordinates(gameboard);
     const direction = Math.random() < 0.5 ? "vertical": "horizontal";
+    ship.orientation = direction;
 
-    if (gameboard.isValid(ship, coordinates[0], coordinates[1], direction))
+    if (gameboard.isValid(ship, coordinates[0], coordinates[1]))
     {
-      gameboard.placeShip(ship, coordinates[0], coordinates[1], direction);
+      gameboard.placeShip(ship, coordinates[0], coordinates[1]);
     } else {
       randomPlacement(gameboard, ship);
     }
