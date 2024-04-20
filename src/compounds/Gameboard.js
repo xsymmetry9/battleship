@@ -132,6 +132,9 @@ class Gameboard{
     console.log(this.checksDifference());
     return this.checksDifference() === 0 ? true : false;
   }
+  changeAllShiptoNotDeployed(){
+    this.ships.map((ship) => ship.deploy = false);
+  }
 
   //Plots hits
 
