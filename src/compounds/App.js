@@ -41,6 +41,8 @@ export default class App{
 
         buttons.innerHTML = `
             <button id="start-battleship" type="button">Start Game</button>
+            <button id="random-placement" type="button">Random Placement</button>
+            <button id= "clear-board" type="button">Clear</button>
             <button id="reset-battleship" class="hidden" type="button">Reset</button>
         `
         return buttons;
@@ -169,12 +171,8 @@ export default class App{
             createBtn.setAttribute("id", ship.id);
             createBtn.setAttribute("value", ship.name);
             createBtn.textContent = ship.name;
-
-   
     
             createBtn.addEventListener("click", (e) => this.handleLoadShipBtn(e, player));
-    
-     
 
             createShips.appendChild(createBtn);
             container.appendChild(createShips);
@@ -240,16 +238,19 @@ export default class App{
 
     static handler(){
         const startBtn = document.getElementById("start-battleship");
+        const randomPlacementBtn = document.getElementById("random-placement");
+        const clearBoardBtn = document.getElementById("clear-board")
         const resetBtn = document.getElementById("reset-battleship");
         const content = document.querySelector(".boards-container");
         const getShipBtns = document.querySelector(".ship-buttons");
+        const playerMenu = document.querySelector(".player-menu");
 
         const move = (e) =>{
             const square = e.currentTarget;
             const col = square.getAttribute("col");
             const row = square.getAttribute("row");
 
-            this.sendMessage(player1.attack(row, col)); //players chooses to go
+            this.sendMessage(player1.attack(player2.name, row, col)); //players chooses to go
             if(player1.opponentBoard.grid[col][row] === "hit"){
                  //checks if game over
                 if(player1.opponentBoard.isGameOver())
@@ -292,16 +293,14 @@ export default class App{
         }
 
         const start = () =>{
-
-
             addHandler();
             getShipBtns.classList.add("hidden");
             this.sendMessage("Player 1 moves first");
-            player1.placeRandomToBoard();
             player2.placeRandomToBoard();
-            this.plotShips(player1.board);   
             startBtn.removeEventListener(("click"), start);
             startBtn.classList.add("hidden");
+            randomPlacementBtn.classList.add("hidden");
+            clearBoardBtn.classList.add("hidden");
             resetBtn.classList.remove("hidden");
         }
 
@@ -309,6 +308,17 @@ export default class App{
             const squares = document.getElementById(player).childNodes;
             squares.forEach((square) => {square.className = "square"});
 
+        }
+        const randomPlacement = (player) =>{
+            player1.placeRandomToBoard();
+            this.plotShips(player1.board);   
+        }
+
+        const clearBoard = (player) =>{
+            console.log("clear")
+            player.board.clearGrid();
+            player.board.changeAllShiptoNotDeployed();
+            removeRender("player1");
         }
 
         const reset = () =>{
@@ -324,10 +334,14 @@ export default class App{
             startBtn.classList.remove("hidden");
             resetBtn.classList.add("hidden");
             getShipBtns.classList.remove("hidden");
+            randomPlacementBtn.classList.remove("hidden");
+            clearBoardBtn.classList.remove("hidden");
 
         }
 
         startBtn.addEventListener(("click"), start);
+        randomPlacementBtn.addEventListener(("click"), () => randomPlacement(player1));
+        clearBoardBtn.addEventListener(("click"), () => clearBoard(player1))
         resetBtn.addEventListener(("click"), reset);
 
    
