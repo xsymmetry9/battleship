@@ -30,8 +30,8 @@ class Player {
 
   }
 //Player chooses to attack on the opponent's board.
-  attack(row, col){
-    const plot = document.getElementById(`${this.name}-${row}-${col}`);
+  attack(enemyBoardName, row, col){
+    const plot = document.getElementById(`${enemyBoardName}-${row}-${col}`);
 
     console.log(`${row}-${col}`);
     console.log(plot);
