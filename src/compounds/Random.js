@@ -26,7 +26,7 @@ const randomPlacement = (gameboard, ship) =>{
   };
 
 //Perform a random attack on the gameboard
-const randomAttack = (gameboard) =>{
+const getRandomCoordinates = (gameboard) =>{
 
     let randomCoordinates = generateCoordinates(gameboard); //returns array
 
@@ -34,8 +34,8 @@ const randomAttack = (gameboard) =>{
     {
       return randomCoordinates;
     } else{
-      return randomAttack(gameboard);
+      return getRandomCoordinates(gameboard);
     }
 }
 
-export {randomAttack, randomPlacement}
+export {getRandomCoordinates, randomPlacement}
