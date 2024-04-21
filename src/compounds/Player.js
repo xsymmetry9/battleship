@@ -1,4 +1,4 @@
-import {randomAttack, randomPlacement} from './Random';
+import {getRandomCoordinates, randomPlacement} from './Random';
 import {plotShip} from './Plot';
 
 class Player {
@@ -33,26 +33,21 @@ class Player {
   attack(enemyBoardName, row, col){
     const plot = document.getElementById(`${enemyBoardName}-${row}-${col}`);
 
-    console.log(`${row}-${col}`);
-    console.log(plot);
-
-
-    if(this.opponentBoard.receiveAttack(this.opponentBoard, row, col) === "hit")
+    if(this.opponentBoard.receiveAttack(row, col) === "hit")
     {
       plot.classList.add("hit");
-      return `${this.name} had a good hit`; 
+      return `hit`; 
     } else {
       plot.classList.add("miss");
-      return `${this.name} missed`;
+      return `miss`;
     };
   }
 //Player chooses to attack randomly on the opponent's board.
-  randomAttack(){
-    const coordinates = randomAttack(this.opponentBoard);
+  randomAttack(enemyBoardName){
+    const coordinates = getRandomCoordinates(this.opponentBoard);
     const row = coordinates[0];
     const col = coordinates[1];
-
-    return this.attack(row, col);
+    return this.attack(enemyBoardName.toLowerCase(), row, col);
   }
 }
 

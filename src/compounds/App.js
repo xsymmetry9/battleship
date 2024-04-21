@@ -241,38 +241,35 @@ export default class App{
         const randomPlacementBtn = document.getElementById("random-placement");
         const clearBoardBtn = document.getElementById("clear-board")
         const resetBtn = document.getElementById("reset-battleship");
-        const content = document.querySelector(".boards-container");
+        // const content = document.querySelector(".boards-container");
         const getShipBtns = document.querySelector(".ship-buttons");
-        const playerMenu = document.querySelector(".player-menu");
+        // const playerMenu = document.querySelector(".player-menu");
 
         const move = (e) =>{
             const square = e.currentTarget;
             const col = square.getAttribute("col");
             const row = square.getAttribute("row");
 
-            this.sendMessage(player1.attack(player2.name, row, col)); //players chooses to go
-            if(player1.opponentBoard.grid[col][row] === "hit"){
-                 //checks if game over
+             
+            if(player1.attack(player2.name, row, col) === "hit"){
+
+                //  checks if game over
                 if(player1.opponentBoard.isGameOver())
                 {
                     alert("Game over");
                     removeHandler();
                 } else{
                     setTimeout(() =>{
-                        this.sendMessage((player2.randomAttack()));
-                        this.updateGameBoard();
+                        this.sendMessage((player2.randomAttack(player1.name)));
                     }, 3000);
                 }
               
-            } else if(player1.opponentBoard.grid[col][row] === "miss")
+            } else 
             {    
                 setTimeout(() =>{
-                    this.sendMessage((player2.randomAttack()));
-                    this.updateGameBoard();
+                    this.sendMessage((player2.randomAttack(player1.name)));
                 }, 3000);
 
-            } else{
-                console.log("error");
             }
            
             square.removeEventListener(("click"), move);
@@ -293,6 +290,7 @@ export default class App{
         }
 
         const start = () =>{
+        
             addHandler();
             getShipBtns.classList.add("hidden");
             this.sendMessage("Player 1 moves first");
@@ -310,8 +308,8 @@ export default class App{
 
         }
         const randomPlacement = (player) =>{
-            player1.placeRandomToBoard();
-            this.plotShips(player1.board);   
+            player.placeRandomToBoard();
+            this.plotShips(player.board);   
         }
 
         const clearBoard = (player) =>{
