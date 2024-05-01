@@ -9,8 +9,19 @@ body{
   color: base.$color-font-dark;
   background-color: base.$bg-color;
 }
+#root{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.text-centered{
+  text-align: center;
+}
 h1{
   text-align: center;
+  padding-bottom: base.$spacing-3;
 }
 h2{
   text-transform: capitalize;
@@ -28,109 +39,105 @@ button:hover, button:focus{
   background-color: base.$dark;
   color: base.$light;
 }
-.banner{
-  display: flex;
-  justify-content: center;
-  padding: 3rem;
-}
-.display-wrapper{
-  display: grid;
-  padding: 1rem;
-  border: 1px solid base.$dark;
-}
 
-.buttons-container{
-  display: flex;
-  justify-content: center;
-  padding: 3rem;
-  gap: 1.2rem;
-}
-
-.boards-container{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-}
-
-.gameboard{
-  display: grid;
-  grid-template-rows: repeat(10, 1fr);
-  grid-template-columns: repeat(10, 1fr);
-  height: 400px;
-  width: 400px;
-  gap: 2px;
-}
-
-.square{
-  border: 1px solid base.$dark;
-}
-.square:hover{
-  cursor: pointer;
-  background-color: lightgrey;
-}
-
-.ship{
-  background-color: base.$dark;
-}
-
-.hit{
-  background-color: green;
-}
-.miss{
-  background-color: base.$miss;
-}
-
-.message-log-container{
-  padding: 2.5rem 0;
-}
-
-.message-log-box{
-  border: 3px solid base.$dark;
-  width: 100%;
-  max-width: 500px;
-  height: 100px;
-  margin-inline: auto;
-  padding: .4rem .5rem;
-  overflow-y: scroll;
-}
-.hidden{
-  display: none;
-}
-.disabled{
-  background-color: gray;
-  color: white;
-}
-
-.player-menu{
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
+.start-btn{
+  margin-top: base.$spacing-3;
   width: 150px;
-  button{
-    width: 100%;
-  }
-
-  .ship-buttons{
-    display: inherit;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-
-  .ship-btn-container{
-    width: inherit;
-    }
-   
-  @media (max-width: 55em)
-    {
-    flex-direction: row;
-    }
-  }
-  .orientation-container{
-    display: flex;
-    flex-direction: column;
-    gap: inherit;
-  }
+  justify-self: center;
 }
+
+// .banner{
+//   display: flex;
+//   justify-content: center;
+//   padding: 3rem;
+// }
+// .display-wrapper{
+//   display: grid;
+//   padding: 1rem;
+//   border: 1px solid base.$dark;
+// }
+
+// .buttons-container{
+//   display: flex;
+//   justify-content: center;
+//   padding: 3rem;
+//   gap: 1.2rem;
+// }
+
+// .boards-container{
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 50px;
+// }
+// .game-container{
+//   display: flex;
+//   border: 1px solid green;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 30px;
+// }
+
+
+// .square{
+//   border: 1px solid base.$dark;
+// }
+// .square:hover{
+//   cursor: pointer;
+//   background-color: lightgrey;
+// }
+
+
+// .message-log-container{
+//   padding: 2.5rem 0;
+// }
+
+// .message-log-box{
+//   border: 3px solid base.$dark;
+//   width: 100%;
+//   max-width: 500px;
+//   height: 100px;
+//   margin-inline: auto;
+//   padding: .4rem .5rem;
+//   overflow-y: scroll;
+// }
+// .hidden{
+//   display: none;
+// }
+// .disabled{
+//   background-color: gray;
+//   color: white;
+// }
+
+// .player-menu{
+//   display: flex;
+//   gap: 10px;
+//   flex-direction: column;
+//   width: 150px;
+//   button{
+//     width: 100%;
+//   }
+
+//   .ship-buttons{
+//     display: inherit;
+//     flex-direction: column;
+//     flex-wrap: wrap;
+//     justify-content: center;
+//     gap: 10px;
+
+//   .ship-btn-container{
+//     width: inherit;
+//     }
+   
+//   @media (max-width: 55em)
+//     {
+//     flex-direction: row;
+//     }
+//   }
+//   .orientation-container{
+//     display: flex;
+//     flex-direction: column;
+//     gap: inherit;
+//   }
+// }

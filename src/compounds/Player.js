@@ -47,6 +47,7 @@ class Player {
     const coordinates = getRandomCoordinates(this.opponentBoard);
     const row = coordinates[0];
     const col = coordinates[1];
+    console.log(enemyBoardName);
     return this.attack(enemyBoardName.toLowerCase(), row, col);
   }
 }

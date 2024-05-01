@@ -1,0 +1,52 @@
+@use 'base.scss';
+
+.buttons-container{
+    display: flex;
+    justify-content: center;
+    padding-bottom: base.$spacing-2;
+    gap: base.$spacing-1;
+}
+.gameboard{
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
+  height: 400px;
+  width: 400px;
+  gap: 2px;
+}
+.square{
+  border: 1px solid base.$dark;
+}
+.square:hover{
+  cursor: pointer;
+  background-color: lightgrey;
+}
+
+.board-container{
+    display: flex;
+    gap: base.$spacing-3;
+}
+.ship-buttons{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 150px;
+  }
+  .setup-menu{
+    display: grid;
+    justify-content: center;
+
+  }
+
+.ship{
+  background-color: base.$dark;
+}
+
+.hit{
+  background-color: green;
+}
+.miss{
+  background-color: base.$miss;
+}

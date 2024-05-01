@@ -1,3 +1,16 @@
+const plotShips = (boardName, gameboard) =>{
+    const getSquares = document.getElementById(boardName).childNodes;
+    
+    getSquares.forEach((item) =>{
+        const col = item.getAttribute("col");
+        const row = item.getAttribute("row");
+        if(gameboard.grid[row][col] !== null)
+        {
+            item.classList.add("ship");
+        }
+    })
+    return getSquares;
+}
 const plotShip = (name, row, col, length, orientation) =>{
     console.log({
         name: name,
@@ -10,7 +23,7 @@ const plotShip = (name, row, col, length, orientation) =>{
     {
         for(let index = 0; index < length; index++){
             const createId = document.getElementById(`${name.toLowerCase()}-${row}-${col + index}`);
-            createId.addEventListener(("click"), e =>{console.log(e.currentTarget)});
+            createId.removeEventListener(("click"), e =>{console.log(e.currentTarget)});
             createId.classList.add("ship");
         }
     } else if(orientation === "vertical") {
@@ -23,20 +36,44 @@ const plotShip = (name, row, col, length, orientation) =>{
     }
 }
 
-const plotHit = () =>{
-
+const plotMessage = (message) =>{
+    const box = document.querySelector(".display-wrapper h2");
+    box.textContent = message;
 }
 
-const plotMiss = () =>{
+const removeRender = (player) =>{
+    const squares = document.getElementById(player).childNodes;
+    squares.forEach((square) => {square.className = "square"});
 
 }
-
-const removePlot = () =>{
-
+const randomPlacement = (player) =>{   
+    if(!player.board.isAllShipsDeployed()){
+        player.placeRandomToBoard();
+        plotShips(player.name.toLowerCase(), player.board);  
+        return player.board.isAllShipsDeployed(); //returns true
+    } else{
+        clearBoard(player);
+        randomPlacement(player);
+    }
 }
 
-const clearBoard = () =>{
-
+const clearBoard = (player) =>{
+    player.board.clearGrid();
+    player.board.changeAllShiptoNotDeployed();
+    removeRender(player.name.toLowerCase());
+    return player.board.isAllShipsDeployed(); //returns false
 }
 
-export {plotShip, plotHit, plotMiss, removePlot}
+//Adds ships on Menu
+const addAllChildNodes = () =>{
+    const getMenu = document.querySelector(".player-menu");
+}
+const removeAllChildNodes = (parent) =>{
+    while(parent.firstChild){
+        console.log(parent);
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+
+export {plotShips, plotShip, plotMessage, removeRender, randomPlacement, addAllChildNodes, removeAllChildNodes, clearBoard}

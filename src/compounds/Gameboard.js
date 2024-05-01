@@ -16,18 +16,21 @@ class Gameboard{
   //Clears the board.
   clearGrid(){
     this.grid.forEach(row => row.fill(null));
+    this.changeAllShiptoNotDeployed();
   }
   //Checks if there are any ships on the board and if it fits.
   isValid(ship, row, col){
     if(ship.orientation === "horizontal"){
       if(col + ship.length > this.cols)
       {
+        console.log("Error: Ship doesn't fit horizontally.");
         return false // "Error: Ship doesn't fit horizontally.";
       } else {
         let index = 0;
         while (index < ship.length)
         {
           if(this.grid[row][col + index] !== null){
+            console.log("Error: A ship is already present at this location horizontally."); //A ship is current in that location)
             return false //"Error: A ship is already present at this location horizontally."; //A ship is current in that location
           }
           index ++;         
@@ -37,12 +40,15 @@ class Gameboard{
         
     } else if(ship.orientation === "vertical") {
         if(row + ship.length > this.rows) {
+          console.log("Ship doesn't fit vertically");
           return false //"Ship doesn't fit vertically"; //Ship doesn't fit.
           } else {
             let index = 0;
             while(index < ship.length) {
               if(this.grid[row + index][col] !== null) {
-              return false //"A ship is already at this location vertically."; //A ship is current in that location
+                console.log("A ship is already at this location vertically.");
+                return false //"A ship is already at this location vertically."; //A ship is current in that location
+               //A ship is current in that location
                 }
               index++;
               }
@@ -101,9 +107,6 @@ class Gameboard{
       this.grid[x][y] = "miss"; //mark down miss
       return "miss";
     } else{
-      const ship = this.grid[x][y];
-      ship.hit();
-      ship.isSunk();
       this.grid[x][y] = "hit";
       return "hit";
     }
@@ -132,15 +135,19 @@ class Gameboard{
     console.log(this.checksDifference());
     return this.checksDifference() === 0 ? true : false;
   }
+
+  isAllShipsDeployed(){
+    let result = true;
+    this.ships.forEach((ship) => {
+      if(!ship.deploy)
+        result = false;
+    });
+    return result;
+  }
   changeAllShiptoNotDeployed(){
     this.ships.map((ship) => ship.deploy = false);
   }
 
-  //Plots hits
-
-  //Plots miss
 }
-
- 
 
 export default Gameboard;

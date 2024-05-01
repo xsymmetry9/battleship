@@ -1,0 +1,58 @@
+.menu-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.351);
+    border-radius: 5px;
+    margin-inline: auto;
+    
+    input[type="text"]
+    {
+        background-color: lightblue;
+        border: none;
+        border-radius: 5px;
+        padding: .4rem .6rem;
+    }
+    #player2Name[disabled]
+    {
+        background-color: lightgray;
+    }
+ 
+    .gameMode{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    .row{
+        padding-bottom: .9rem;
+    }
+
+    .buttons-container{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 12px;
+    }
+    .submit-btn{
+        width: 125px;
+        margin-inline: auto;
+        cursor: pointer;
+        background-color: rgb(43, 201, 43);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        padding: .6rem 0;
+    }
+    .submit-btn:hover, .submit-btn:focus{
+        background-color: rgba(43, 201, 43, 0.641);
+    }
+
+}
