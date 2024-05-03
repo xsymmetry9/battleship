@@ -2,12 +2,12 @@ import {addHandler, removeHandler} from './Functions'
 import {plotMessage, randomPlacement} from './Plot'
 import "../style/game.scss"
 
-const banner = (message) =>{
+export const banner = (message) =>{
     const item = document.createElement("div")
     item.innerHTML = `<h1>${message}</h1>`;
     return item;
 }
-const loadButtons =(player) =>{
+export const loadButtons =(player) =>{
     const buttons = document.createElement("div");
     buttons.className = "buttons-container";
 
@@ -24,10 +24,10 @@ const loadButtons =(player) =>{
 
     return buttons;
     }
-const loadBoard = (player) =>{
+export const loadBoard = (player) =>{
      const container = document.createElement("div");
      container.className = "gameboard";
-     container.setAttribute("id", player.name);
+     container.setAttribute("id", player.name.toLowerCase());
     const getGameboard = player.board;
 
         for (let i = 0; i < getGameboard.rows; i++)
@@ -46,14 +46,29 @@ const loadBoard = (player) =>{
         }
         return container;
     }
-const loadStartButton = () =>{
+export const updateBoard = (player) =>{
+        const getSquares = document.querySelector(".gameboard").childNodes;
+
+        getSquares.forEach((item) => {
+            const parsedRow = item.getAttribute("row");
+            const parsedCol = item.getAttribute("col");
+            if(player.board.grid[parsedRow][parsedCol] === "hit")
+            {
+                item.classList.add("hit");
+            } else if(player.board.grid[parsedRow][parsedCol] === "miss")
+            {
+                item.classList.add("miss");
+            } 
+        });
+    }
+export const loadStartButton = () =>{
     const startBtn = document.createElement("button");
     startBtn.className="start-btn";
     startBtn.textContent = "Done";
     return startBtn;
 }
 
-const shipMenu = (player) => {
+export const shipMenu = (player) => {
         const container = document.createElement("div");
         container.className = "ship-buttons";
    
@@ -71,7 +86,7 @@ const shipMenu = (player) => {
         return container;
     }
 
-const handleLoadShipBtn = (e, player) =>{
+export const handleLoadShipBtn = (e, player) =>{
     const ship = player.board.getShip(e.currentTarget.value);
     console.log(ship);
     const getSquares = document.getElementById(player.name.toLowerCase()).childNodes;
@@ -92,7 +107,7 @@ class Game{
     {
         this.player1 = player1;
         this.player2 = player2;
-        this.isGameOver = false;
+        this.winner = null;
         this.turn = 1;
     }
 
@@ -124,34 +139,20 @@ class Game{
     }
 
     loadSetupUI(player){
-        console.log(player);
         const root = document.getElementById("root");
-
         const userInterface = document.createElement("div");
         userInterface.className = "setup-menu";
-
         //Load Set pieces by players
         userInterface.appendChild(banner(player.name));
         userInterface.appendChild(loadButtons(player));
-
         const shipMenuBoardContainer = document.createElement("div");
         shipMenuBoardContainer.className = "board-container";
         shipMenuBoardContainer.appendChild(loadBoard(player));
         shipMenuBoardContainer.appendChild(shipMenu(player));
         userInterface.appendChild(shipMenuBoardContainer);
         userInterface.appendChild(loadStartButton());
-
-        //After First player place all pieces, 2nd player starts to set the pieces
-        //if 2nd player is a computer, start the game        
-
         root.appendChild(userInterface);
     }
-    loadGameUI(){
-
-    }
-
-  
-
 }
 
 export default Game;

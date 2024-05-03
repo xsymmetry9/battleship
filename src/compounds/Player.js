@@ -32,6 +32,7 @@ class Player {
 //Player chooses to attack on the opponent's board.
   attack(enemyBoardName, row, col){
     const plot = document.getElementById(`${enemyBoardName}-${row}-${col}`);
+    console.log(enemyBoardName);
 
     if(this.opponentBoard.receiveAttack(row, col) === "hit")
     {
@@ -47,8 +48,8 @@ class Player {
     const coordinates = getRandomCoordinates(this.opponentBoard);
     const row = coordinates[0];
     const col = coordinates[1];
-    console.log(enemyBoardName);
-    return this.attack(enemyBoardName.toLowerCase(), row, col);
+    console.log("random attack executed");
+    return this.attack(enemyBoardName, row, col);
   }
 }
 

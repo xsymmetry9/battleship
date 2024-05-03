@@ -1,111 +1,19 @@
 import Menu from '../Section/Menu';
-import Board from './Gameboard';
-import Player from './Player';
-import Game from './Game';
-import {plotMessage,
-     removeRender, 
-     plotShip,
-     plotShips, 
-     randomPlacement, 
-     removeAllChildNodes,
-     addAllChildNodes, 
-     clearBoard} from './Plot'
+// import Board from './Gameboard';
+// import Player from './Player';
+// import Game from './Game';
+// import {plotMessage,
+//      removeRender, 
+//      plotShip,
+//      plotShips, 
+//      randomPlacement, 
+//      removeAllChildNodes,
+//      addAllChildNodes, 
+//      clearBoard} from './Plot'
 
 export default class App{
     static loadPage(){
-        const body = document.getElementById("root");
-
-        body.appendChild(Menu.load());
-        Menu.loadHandlers();
-        this.submitHandler();
-
-        // body.appendChild(this.loadBanner());
-        // body.appendChild(this.loadButtons());
-        // body.appendChild(this.loadDOM());
-        // body.appendChild(this.loadMessageLog());
-
-        // this.handler();
-
-    }
-    static submitHandler(){
-       const submit = document.querySelector(".submit-btn");
-        submit.addEventListener(("click"), () =>{
-            
-            const player1Board = new Board();
-            const player2Board = new Board()
-
-            const isPlayerVsComputer = document.getElementById("vsComputer").checked;
-            const isPlayerVsPlayer = document.getElementById("vsPlayer").checked;
-           if(isPlayerVsPlayer || isPlayerVsComputer)
-           {
-                const getPlayer1Name = new Player(document.getElementById("player1Name").value, player1Board, player2Board, true);
-                const getPlayer2Name = isPlayerVsComputer ? new Player("computer", player2Board, player1Board, false) : 
-                    new Player(document.getElementById("player2Name").value, player2Board, player1Board, true);
-
-                const game = new Game(getPlayer1Name, getPlayer2Name)
-                document.getElementById("root").removeChild(document.querySelector(".menu-box"));
-
-                game.loadSetupUI(game.player1); //Player1 goes first
-                const randomPlacementBtn = document.getElementById("random-placement");
-                const clearBtn = document.getElementById("clear-board");
-                const doneBtn = document.querySelector(".start-btn");
-                const shipBtns = document.querySelectorAll(".ship-btn");
-                shipBtns.forEach((shipBtn => shipBtn.addEventListener(("click"), () => this.activateSquare(game.player1, shipBtn.value))));
-                
-                randomPlacementBtn.addEventListener(("click"), () => randomPlacement(game.player1));
-                clearBtn.addEventListener(("click"), () => clearBoard(game.player1));
-                doneBtn.addEventListener(("click"), () => this.finishedSetupBtn(game));
-
-           } else {
-                console.log("error");
-           }
-        
-        });
-    }
-    static activateSquare = (player, name) =>{
-        const getSquares = document.querySelector(".gameboard").childNodes;
-
-        const placeShipToBoard = (e) => {
-            const row = parseInt(e.target.getAttribute("row")); //returns row
-            const col = parseInt(e.target.getAttribute("col")); //returns column
-            const ship = player.board.getShip(name); //returns ship
-            // console.log(player.board.placeShip(ship, parseInt(row), parseInt(col)));
-
-            if(player.board.grid[row][col] === null)
-            {
-                //place the ship
-                return player.placeShip(ship, row, col);
-
-            } else {
-                //selects the ship
-                return("There is a ship located there.  Place another square.");
-            }
-        }
-        getSquares.forEach((item) =>{
-            item.addEventListener(("click"), placeShipToBoard);
-        })
-
-    }
-    static finishedSetupBtn = (game) =>{
-        document.getElementById("root").removeChild(document.querySelector(".setup-menu"));
-        if(game.player2.isHuman){
-            game.loadSetupUI(game.player2);
-            const randomPlacementBtn = document.getElementById("random-placement");
-            const clearBtn = document.getElementById("clear-board");
-            const doneBtn = document.querySelector(".start-btn");
-            const shipBtns = document.querySelectorAll(".ship-btn");
-            shipBtns.forEach((shipBtn => shipBtn.addEventListener(("click"), () => this.activateSquare(game.player2, shipBtn.value))));
-            
-            randomPlacementBtn.addEventListener(("click"), () => randomPlacement(game.player2));
-            clearBtn.addEventListener(("click"), () => clearBoard(game.player2));
-            doneBtn.addEventListener(("click"), () => this.startGame);
-            
-        } else{
-            console.log("computer");
-        }
-    }
-    static startGame = (game) =>{
-        console.log(game);
+        Menu.load();
     }
 
     // static loadButtons(){
@@ -288,21 +196,7 @@ export default class App{
     //         }
     //     })
     // }
-    // static updateGameBoard(player){
-    //     const getSquares = document.getElementById(player).childNodes;
 
-    //     getSquares.forEach((item) => {
-    //         const col = item.getAttribute("col");
-    //         const row = item.getAttribute("row");
-    //         if(player1.board.grid[col][row] == "hit")
-    //         {
-    //             item.classList.remove("ship");
-    //             item.classList.add("hit");
-    //         } else if(player1.board.grid[col][row] == "miss")
-    //         {
-    //         }
-    //     });
-    // }
 
     // static handler(){
     //     const startBtn = document.getElementById("start-battleship");

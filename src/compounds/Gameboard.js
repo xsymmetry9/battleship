@@ -23,14 +23,12 @@ class Gameboard{
     if(ship.orientation === "horizontal"){
       if(col + ship.length > this.cols)
       {
-        console.log("Error: Ship doesn't fit horizontally.");
         return false // "Error: Ship doesn't fit horizontally.";
       } else {
         let index = 0;
         while (index < ship.length)
         {
           if(this.grid[row][col + index] !== null){
-            console.log("Error: A ship is already present at this location horizontally."); //A ship is current in that location)
             return false //"Error: A ship is already present at this location horizontally."; //A ship is current in that location
           }
           index ++;         
@@ -40,13 +38,12 @@ class Gameboard{
         
     } else if(ship.orientation === "vertical") {
         if(row + ship.length > this.rows) {
-          console.log("Ship doesn't fit vertically");
           return false //"Ship doesn't fit vertically"; //Ship doesn't fit.
           } else {
             let index = 0;
             while(index < ship.length) {
               if(this.grid[row + index][col] !== null) {
-                console.log("A ship is already at this location vertically.");
+                
                 return false //"A ship is already at this location vertically."; //A ship is current in that location
                //A ship is current in that location
                 }

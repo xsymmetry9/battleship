@@ -1,5 +1,5 @@
 const plotShips = (boardName, gameboard) =>{
-    const getSquares = document.getElementById(boardName).childNodes;
+    const getSquares = document.getElementById(boardName.toLowerCase()).childNodes;
     
     getSquares.forEach((item) =>{
         const col = item.getAttribute("col");

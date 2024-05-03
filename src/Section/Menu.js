@@ -1,10 +1,13 @@
 import '../style/menu.scss'
-import Game from '../compounds/Game'
-import Player from '../compounds/Player';
-import Board from '../compounds/Gameboard';
+import GameSetup from "./GameSetup";
 
 export default class Menu{
     static load(){
+        const root = document.getElementById("root");
+        root.appendChild(this.UI());
+        this.loadHandlers();
+    }
+    static UI(){
         const container = document.createElement("div");
         container.className = "menu-box";
 
@@ -41,9 +44,10 @@ export default class Menu{
         `
         return container;
     }
-
     static loadHandlers(){
         const getRadios = document.querySelectorAll(".gameMode input");
+        const submit = document.querySelector(".submit-btn");
+
         getRadios.forEach((item) => {
             item.addEventListener(("change"), () =>{
                 if(item.getAttribute("id") === "vsPlayer")
@@ -54,6 +58,8 @@ export default class Menu{
                 }
             })
         });
+
+        submit.addEventListener(("click"), () => GameSetup.load());
     }
 
 
