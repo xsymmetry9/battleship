@@ -32,7 +32,6 @@ class Player {
 //Player chooses to attack on the opponent's board.
   attack(enemyBoardName, row, col){
     const plot = document.getElementById(`${enemyBoardName}-${row}-${col}`);
-    console.log(enemyBoardName);
 
     if(this.opponentBoard.receiveAttack(row, col) === "hit")
     {

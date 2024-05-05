@@ -101,6 +101,7 @@ export const handleSquareClick = (e, ship, player) => {
 
         player.board.placeShip(ship, row, col, "horizontal");
     }
+const root = document.getElementById("root");
 
 class Game{
     constructor(player1, player2)
@@ -139,7 +140,6 @@ class Game{
     }
 
     loadSetupUI(player){
-        const root = document.getElementById("root");
         const userInterface = document.createElement("div");
         userInterface.className = "setup-menu";
         //Load Set pieces by players
@@ -153,6 +153,7 @@ class Game{
         userInterface.appendChild(loadStartButton());
         root.appendChild(userInterface);
     }
+
 }
 
 export default Game;

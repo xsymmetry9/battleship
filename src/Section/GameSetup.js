@@ -1,14 +1,14 @@
 import Board from "../compounds/Gameboard";
-import Game,  {loadBoard, updateBoard} from "../compounds/Game";
+import Game from "../compounds/Game";
 import Player from "../compounds/Player";
-import {plotMessage,
-    removeRender, 
-    plotShip,
-    plotShips, 
+import { 
     randomPlacement, 
-    removeAllChildNodes,
-    addAllChildNodes, 
-    clearBoard} from '../compounds/Plot'
+    plotGame,
+    clearBoard,
+    loadBoard,
+    updateBoard,
+    plotShips
+    } from '../compounds/Plot'
 
 export default class GameSetup{
     static load(){
@@ -56,6 +56,7 @@ export default class GameSetup{
              }
          }
          getSquares.forEach((item) =>{
+
              item.addEventListener(("click"), placeShipToBoard);
          })
      }
@@ -87,18 +88,25 @@ export default class GameSetup{
             return game.winner;
         }
         //Whoever is the attacker
-        getRoot.appendChild(loadBoard(game.getReceiver()));
+        getRoot.appendChild(plotGame(game));
         updateBoard(game.getReceiver());
         if(game.getAttacker().isHuman)
         {            
             //load previous moves if any
             const squares = document.querySelectorAll(".square");
             squares.forEach((item) =>{
+                const col = parseInt(item.getAttribute("col"));
+                const row = parseInt(item.getAttribute("row"));
+
+                //Doesn't add eventListener because the square is occupied.
+                if(game.getReceiver().board.grid[row][col] !== null){ 
+                    return;
+                }
                 item.addEventListener(("click"), e =>{
                     const row = e.currentTarget.getAttribute("row");
                     const col = e.currentTarget.getAttribute("col");
                     game.getAttacker().attack(game.getReceiver().name, row, col);
-                    getRoot.removeChild(document.querySelector(".gameboard"));
+                    getRoot.removeChild(document.querySelector(".playerBoard"));
                     game.nextTurn();
                     this.play(game);
                 });
@@ -108,7 +116,7 @@ export default class GameSetup{
             plotShips(game.getReceiver().name, game.getReceiver().board);
             game.getAttacker().randomAttack(game.getReceiver().name)
             setTimeout(() =>{
-                getRoot.removeChild(document.querySelector(".gameboard"));
+                getRoot.removeChild(document.querySelector(".playerBoard"));
                 game.nextTurn();
                 this.play(game);
             }, 1000);

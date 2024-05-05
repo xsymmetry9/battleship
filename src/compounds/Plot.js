@@ -74,6 +74,81 @@ const removeAllChildNodes = (parent) =>{
         parent.removeChild(parent.firstChild);
     }
 }
+const plotBanner = (message) =>{
 
+    const container = document.createElement("div");
+    const box = document.createElement("div");
+    box.innerHTML = `<h2>${message}</h2>`
+    container.appendChild(box);
+    return container;
+}
+const plotTextBox = (text) =>{
+    const container = document.createElement("div");
+    container.innerHTML = `<p>${text}</p>`;
+    return container;
+}
+const loadBoard = (player) =>{
+    const container = document.createElement("div");
+    container.className = "gameboard";
+    container.setAttribute("id", player.name.toLowerCase());
+   const getGameboard = player.board;
 
-export {plotShips, plotShip, plotMessage, removeRender, randomPlacement, addAllChildNodes, removeAllChildNodes, clearBoard}
+       for (let i = 0; i < getGameboard.rows; i++)
+       {
+           for (let j = 0; j<getGameboard.cols; j++)
+           {
+               const square = document.createElement("div");
+               square.className = "square";
+
+               square.setAttribute("row", i);
+               square.setAttribute("col", j);
+               square.setAttribute("id", `${player.name.toLowerCase()}-${i}-${j}`);
+
+               container.appendChild(square);
+           }
+       }
+       return container;
+   }
+const updateBoard = (player) =>{
+       const getSquares = document.querySelector(".gameboard").childNodes;
+
+       getSquares.forEach((item) => {
+           const parsedRow = item.getAttribute("row");
+           const parsedCol = item.getAttribute("col");
+           if(player.board.grid[parsedRow][parsedCol] === "hit")
+           {
+               item.classList.add("hit");
+           } else if(player.board.grid[parsedRow][parsedCol] === "miss")
+           {
+               item.classList.add("miss");
+           } 
+       });
+   }
+
+const plotGame = (game) =>{
+    //game -> returns object of player's board game.receiver();
+    const container = document.createElement("div");
+    container.className = "playerBoard";
+    container.appendChild(plotBanner(`${game.getAttacker().name}`));
+    container.appendChild(loadBoard(game.getReceiver()));
+    container.appendChild(plotTextBox(`${game.getAttacker().name}'s turn to attack ${game.getReceiver().name}`));
+
+return container;
+
+}
+
+export {
+    plotShips, 
+    plotShip, 
+    plotMessage, 
+    removeRender,
+    randomPlacement, 
+    addAllChildNodes, 
+    removeAllChildNodes, 
+    clearBoard,
+    plotGame,
+    plotTextBox,
+    plotBanner,
+    updateBoard,
+    loadBoard
+}
