@@ -104,6 +104,8 @@ class Gameboard{
       this.grid[x][y] = "miss"; //mark down miss
       return "miss";
     } else{
+      const ship = this.grid[x][y];
+      ship.hit();
       this.grid[x][y] = "hit";
       return "hit";
     }

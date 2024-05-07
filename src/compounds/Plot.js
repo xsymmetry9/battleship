@@ -46,14 +46,16 @@ const removeRender = (player) =>{
     squares.forEach((square) => {square.className = "square"});
 
 }
-const randomPlacement = (player) =>{   
+const plotAllShipsRandomly = (player) => player.board.ships.forEach((ship) => plotRandomPlacement(player, ship));
+
+const plotRandomPlacement = (player) =>{   
     if(!player.board.isAllShipsDeployed()){
         player.placeRandomToBoard();
         plotShips(player.name.toLowerCase(), player.board);  
         return player.board.isAllShipsDeployed(); //returns true
     } else{
         clearBoard(player);
-        randomPlacement(player);
+        plotRandomPlacement(player);
     }
 }
 
@@ -64,10 +66,6 @@ const clearBoard = (player) =>{
     return player.board.isAllShipsDeployed(); //returns false
 }
 
-//Adds ships on Menu
-const addAllChildNodes = () =>{
-    const getMenu = document.querySelector(".player-menu");
-}
 const removeAllChildNodes = (parent) =>{
     while(parent.firstChild){
         console.log(parent);
@@ -77,6 +75,7 @@ const removeAllChildNodes = (parent) =>{
 const plotBanner = (message) =>{
 
     const container = document.createElement("div");
+    // container.className="bottom-spacing-1";
     const box = document.createElement("div");
     box.innerHTML = `<h2>${message}</h2>`
     container.appendChild(box);
@@ -84,6 +83,7 @@ const plotBanner = (message) =>{
 }
 const plotTextBox = (text) =>{
     const container = document.createElement("div");
+    container.className = "text-box";
     container.innerHTML = `<p>${text}</p>`;
     return container;
 }
@@ -124,12 +124,28 @@ const updateBoard = (player) =>{
            } 
        });
    }
+const middleSection = (ships) =>{
+    const container = document.createElement("div");
+    container.className="shipsBox | display-flex-row bottom-spacing-1";
 
+    ships.forEach((ship) => {
+        const createBox = document.createElement("div");
+        createBox.className = "display-flex-row";
+        createBox.innerHTML = `
+        <p>${ship.name}</p>
+        <p>${ship.length - ship.hits}</p>`
+
+        container.appendChild(createBox);
+    });
+
+    return container;
+}
 const plotGame = (game) =>{
     //game -> returns object of player's board game.receiver();
     const container = document.createElement("div");
     container.className = "playerBoard";
     container.appendChild(plotBanner(`${game.getAttacker().name}`));
+    container.appendChild(middleSection(game.getReceiver().board.ships));
     container.appendChild(loadBoard(game.getReceiver()));
     container.appendChild(plotTextBox(`${game.getAttacker().name}'s turn to attack ${game.getReceiver().name}`));
 
@@ -142,8 +158,8 @@ export {
     plotShip, 
     plotMessage, 
     removeRender,
-    randomPlacement, 
-    addAllChildNodes, 
+    plotAllShipsRandomly,
+    plotRandomPlacement, 
     removeAllChildNodes, 
     clearBoard,
     plotGame,

@@ -1,13 +1,14 @@
 import Board from "../compounds/Gameboard";
 import Game from "../compounds/Game";
 import Player from "../compounds/Player";
+import {randomPlacement} from "../compounds/Random";
 import { 
-    randomPlacement, 
     plotGame,
     clearBoard,
     loadBoard,
     updateBoard,
-    plotShips
+    plotShips,
+    plotAllShipsRandomly
     } from '../compounds/Plot'
 
 export default class GameSetup{
@@ -62,23 +63,32 @@ export default class GameSetup{
      }
  
      static setupGame = (game, playerTurn) =>{
-         const player = playerTurn === "player 1" ? game.player1 : game.player2;
-         game.loadSetupUI(player);
-         const randomPlacementBtn = document.getElementById("random-placement");
-         const clearBtn = document.getElementById("clear-board");
-         const doneBtn = document.querySelector(".start-btn");
-         const shipBtns = document.querySelectorAll(".ship-btn");
-         shipBtns.forEach((shipBtn => shipBtn.addEventListener(("click"), () => this.activateSquare(player, shipBtn.value))));
+        const player = playerTurn === "player 1" ? game.player1 : game.player2;
+        game.loadSetupUI(player);
+        const randomPlacementBtn = document.getElementById("random-placement");
+        const clearBtn = document.getElementById("clear-board");
+        const doneBtn = document.querySelector(".start-btn");
+        const shipBtns = document.querySelectorAll(".ship-btn");
+        shipBtns.forEach((shipBtn => shipBtn.addEventListener(("click"), () => this.activateSquare(player, shipBtn.value))));
          
-         randomPlacementBtn.addEventListener(("click"), () => randomPlacement(player));
-         clearBtn.addEventListener(("click"), () => clearBoard(player));
-         doneBtn.addEventListener(("click"), () => this.finishedSetupBtn(game, playerTurn));
-         return player;
+        randomPlacementBtn.addEventListener(("click"), () => plotAllShipsRandomly(player));
+        clearBtn.addEventListener(("click"), () => clearBoard(player));
+        doneBtn.addEventListener(("click"), () => this.finishedSetupBtn(game, playerTurn));
+        return player;
      }
  
      static finishedSetupBtn = (game, playerTurn) =>{
          document.getElementById("root").removeChild(document.querySelector(".setup-menu"));
-         game.player2.isHuman && playerTurn === "player 1" ? this.setupGame(game, "player 2") : this.play(game);
+        if(game.player2.isHuman && playerTurn === "player 1"){
+            this.setupGame(game, "player 2")
+        } else{
+            // randomPlacement(game.player2);
+            //generate randomPlacement for player 2
+            game.player2.board.ships.forEach((ship) =>{
+                randomPlacement(game.player2.board, ship);
+            });
+            this.play(game);
+        } 
      }
 
      static play =(game) =>{
@@ -99,7 +109,7 @@ export default class GameSetup{
                 const row = parseInt(item.getAttribute("row"));
 
                 //Doesn't add eventListener because the square is occupied.
-                if(game.getReceiver().board.grid[row][col] !== null){ 
+                if(game.getReceiver().board.grid[row][col] === "hit" || game.getReceiver().board.grid[row][col] === "miss"){ 
                     return;
                 }
                 item.addEventListener(("click"), e =>{
