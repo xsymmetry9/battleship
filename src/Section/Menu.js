@@ -5,6 +5,7 @@ export default class Menu{
     static load(){
         const root = document.getElementById("root");
         root.appendChild(this.UI());
+
         this.loadHandlers();
     }
     static UI(){

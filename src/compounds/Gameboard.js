@@ -13,6 +13,10 @@ class Gameboard{
     ];
   }
 
+  reset(){
+    this.clearGrid();
+    this.isAllShipsDeployed();
+  }
   //Clears the board.
   clearGrid(){
     this.grid.forEach(row => row.fill(null));

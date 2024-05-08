@@ -5,10 +5,10 @@ import {randomPlacement} from "../compounds/Random";
 import { 
     plotGame,
     clearBoard,
-    loadBoard,
     updateBoard,
     plotShips,
-    plotAllShipsRandomly
+    plotAllShipsRandomly,
+    loadPlayAgainMenu,
     } from '../compounds/Plot'
 
 export default class GameSetup{
@@ -90,18 +90,43 @@ export default class GameSetup{
             this.play(game);
         } 
      }
+     static reset = (game) => {
+        console.log("reset");
+
+        game.player1.board.reset();
+        game.player2.board.reset();
+        console.log(game.player1.board);
+        game.winner = null;
+        game.turn = 1;
+        document.getElementById("root").removeChild(document.querySelector(".playerBoard"));
+        //loads setup menu
+        this.setupGame(game, "player 1");
+     }
 
      static play =(game) =>{
         const getRoot =  document.getElementById("root");
+
         if(game.winner != null){
             console.log(game.winner);
-            return game.winner;
+            alert(game.winner);
+            getRoot.removeChild(document.querySelector(".playerBoard"));
+            //Need to test this code.
+            getRoot.appendChild(loadPlayAgainMenu(game.getAttacker().name, game.getReceiver().name));
+            document.getElementById("play-again").addEventListener(("click"), ()=> this.reset(game));            
         }
+        if(game.getReceiver().board.isGameOver())
+            {
+                game.winner = game.getAttacker();
+                this.play(game);
+            }
+
         //Whoever is the attacker
         getRoot.appendChild(plotGame(game));
         updateBoard(game.getReceiver());
         if(game.getAttacker().isHuman)
         {            
+            document.getElementById("play-again").addEventListener(("click"), () => this.reset(game));
+
             //load previous moves if any
             const squares = document.querySelectorAll(".square");
             squares.forEach((item) =>{
@@ -124,14 +149,13 @@ export default class GameSetup{
         } else {
             //random attack
             plotShips(game.getReceiver().name, game.getReceiver().board);
-            game.getAttacker().randomAttack(game.getReceiver().name)
+            game.getAttacker().randomAttack(game.getReceiver().name);
             setTimeout(() =>{
                 getRoot.removeChild(document.querySelector(".playerBoard"));
                 game.nextTurn();
                 this.play(game);
             }, 1000);
         }
-
         return game.getCurrentTurnOpponent();
 
      }

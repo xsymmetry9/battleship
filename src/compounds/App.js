@@ -1,19 +1,9 @@
 import Menu from '../Section/Menu';
-// import Board from './Gameboard';
-// import Player from './Player';
-// import Game from './Game';
-// import {plotMessage,
-//      removeRender, 
-//      plotShip,
-//      plotShips, 
-//      randomPlacement, 
-//      removeAllChildNodes,
-//      addAllChildNodes, 
-//      clearBoard} from './Plot'
 
 export default class App{
     static loadPage(){
         Menu.load();
+
     }
 
     // static loadButtons(){

@@ -36,10 +36,10 @@ class Player {
     if(this.opponentBoard.receiveAttack(row, col) === "hit")
     {
       plot.classList.add("hit");
-      return `hit`; 
+      return true; 
     } else {
       plot.classList.add("miss");
-      return `miss`;
+      return false;
     };
   }
 //Player chooses to attack randomly on the opponent's board.

@@ -147,11 +147,32 @@ const plotGame = (game) =>{
     container.appendChild(plotBanner(`${game.getAttacker().name}`));
     container.appendChild(middleSection(game.getReceiver().board.ships));
     container.appendChild(loadBoard(game.getReceiver()));
+    container.appendChild(playAgainButton());
     container.appendChild(plotTextBox(`${game.getAttacker().name}'s turn to attack ${game.getReceiver().name}`));
 
 return container;
 
 }
+
+const playAgainButton = () =>{
+    const button = document.createElement("button");
+    button.setAttribute("id", "play-again");
+    button.textContent = "Play again";
+    return button;
+}
+const loadPlayAgainMenu =(winner, loser) =>{
+
+    const playAgainMenu = document.createElement("div");
+    playAgainMenu.className = "menu-box";
+    playAgainMenu.innerHTML = `
+    <h2>${winner} has defeated ${loser}</h2>
+    <p>Would you like to play again?</p>
+    <button class="" id="play-again">Play Again</button>
+    `;
+
+    return playAgainMenu;
+}
+
 
 export {
     plotShips, 
@@ -166,5 +187,6 @@ export {
     plotTextBox,
     plotBanner,
     updateBoard,
-    loadBoard
+    loadBoard,
+    loadPlayAgainMenu
 }
