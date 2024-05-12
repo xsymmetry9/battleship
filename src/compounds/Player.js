@@ -18,11 +18,10 @@ class Player {
     return this.opponentBoard.ships;
   }
 //A function that places ships on the board manually.
-  placeShip(ship, row, col)
+  placeShip(ship, row, col, orientation)
   {
-    if (!ship.deploy && this.board.placeShip(ship, row, col)){
-      plotShip(this.name, row, col, ship.length, ship.orientation);
-      return this.board.grid;
+    if (!ship.deploy && this.board.placeShip(ship, row, col, orientation)){
+      return plotShip(this.name, row, col, ship.length, orientation);
 
     } else {
       return "Ship has already been deployed.  Tried again"

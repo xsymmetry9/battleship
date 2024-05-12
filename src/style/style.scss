@@ -63,6 +63,7 @@ button:hover, button:focus{
 }
 
 .playerBoard{
+  position: relative;
   background-color: rgba(0, 0, 0, 0.3);
   height: 100vh;
   max-width: 1100px;
@@ -74,98 +75,27 @@ button:hover, button:focus{
   align-items: center;
   gap: base.$spacing-3;
 }
-// .banner{
-//   display: flex;
-//   justify-content: center;
-//   padding: 3rem;
-// }
-// .display-wrapper{
-//   display: grid;
-//   padding: 1rem;
-//   border: 1px solid base.$dark;
-// }
+.ver-hor-btn{
+ position: absolute;
+ width: 400px;
+ height: 400px;
+ border: 1px solid base.$light;
 
-// .buttons-container{
-//   display: flex;
-//   justify-content: center;
-//   padding: 3rem;
-//   gap: 1.2rem;
-// }
+ z-index: 1;
+ background-color: black;
+ display: flex;
+ gap: 5px;
+ justify-content: center;
+ align-items: center;
+}
 
-// .boards-container{
-//   display: flex;
-//   flex-wrap: wrap;
-//   justify-content: center;
-//   align-items: center;
-//   gap: 50px;
-// }
-// .game-container{
-//   display: flex;
-//   border: 1px solid green;
-//   align-items: center;
-//   justify-content: center;
-//   gap: 30px;
-// }
-
-
-// .square{
-//   border: 1px solid base.$dark;
-// }
-// .square:hover{
-//   cursor: pointer;
-//   background-color: lightgrey;
-// }
-
-
-// .message-log-container{
-//   padding: 2.5rem 0;
-// }
-
-// .message-log-box{
-//   border: 3px solid base.$dark;
-//   width: 100%;
-//   max-width: 500px;
-//   height: 100px;
-//   margin-inline: auto;
-//   padding: .4rem .5rem;
-//   overflow-y: scroll;
-// }
-// .hidden{
-//   display: none;
-// }
-// .disabled{
-//   background-color: gray;
-//   color: white;
-// }
-
-// .player-menu{
-//   display: flex;
-//   gap: 10px;
-//   flex-direction: column;
-//   width: 150px;
-//   button{
-//     width: 100%;
-//   }
-
-//   .ship-buttons{
-//     display: inherit;
-//     flex-direction: column;
-//     flex-wrap: wrap;
-//     justify-content: center;
-//     gap: 10px;
-
-//   .ship-btn-container{
-//     width: inherit;
-//     }
-   
-//   @media (max-width: 55em)
-//     {
-//     flex-direction: row;
-//     }
-//   }
-//   .orientation-container{
-//     display: flex;
-//     flex-direction: column;
-//     gap: inherit;
-//   }
-// }
+.draggable{
+  border: 1px solid white;
+  padding: 6px 8px;
+}
+.dragging{
+  background-color: green;
+}
+.dragover{
+  background-color: green;
+}

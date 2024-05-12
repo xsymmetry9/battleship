@@ -14,12 +14,12 @@ const generateCoordinates = (gameboard) =>{
 //Generate a random placement on the board.
 const randomPlacement = (gameboard, ship) =>{
     const coordinates = generateCoordinates(gameboard);
-    const direction = Math.random() < 0.5 ? "vertical": "horizontal";
-    ship.orientation = direction;
+    const orientation = Math.random() < 0.5 ? "vertical": "horizontal";
+   
 
-    if (gameboard.isValid(ship, coordinates[0], coordinates[1]))
+    if (gameboard.isValid(ship, coordinates[0], coordinates[1], orientation))
     {
-      gameboard.placeShip(ship, coordinates[0], coordinates[1]);
+      gameboard.placeShip(ship, coordinates[0], coordinates[1], orientation);
     } else {
       randomPlacement(gameboard, ship);
     }

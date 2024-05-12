@@ -9,8 +9,12 @@ import {
     plotShips,
     plotAllShipsRandomly,
     loadPlayAgainMenu,
+    loadVerticalHorizontalBtns
     } from '../compounds/Plot'
 
+const removeWindow = (item) =>{
+    document.getElementById("root").removeChild(document.querySelector(item));
+}
 export default class GameSetup{
     static load(){
         this.setup();
@@ -25,42 +29,92 @@ export default class GameSetup{
        if(isPlayerVsPlayer || isPlayerVsComputer)
        {
             const getPlayer1Name = new Player(document.getElementById("player1Name").value, player1Board, player2Board, true);
+
+            //Determines if player 2 is human or computer
             const getPlayer2Name = isPlayerVsComputer ? new Player("computer", player2Board, player1Board, false) : 
                 new Player(document.getElementById("player2Name").value, player2Board, player1Board, true);
+
             const game = new Game(getPlayer1Name, getPlayer2Name);
-            document.getElementById("root").removeChild(document.querySelector(".menu-box"));
+            removeWindow(".menu-box");
             this.setupGame(game, "player 1");
+
             return game;
 
        } else {
             console.log("error");
+            return "error";
        }
     }
+    static activateSquares = (player, name, e) =>{
+        document.querySelector(".setup-menu").removeChild(document.querySelector(".ver-hor-btn"));
+        const orientation = e.currentTarget.id;
+        const ship = player.board.getShip(name); //returns ship
+        // ship.setOrientation(orientation);
 
-     static activateSquare = (player, name) =>{
-         const getSquares = document.querySelector(".gameboard").childNodes;
- 
-         const placeShipToBoard = (e) => {
-             const row = parseInt(e.target.getAttribute("row")); //returns row
-             const col = parseInt(e.target.getAttribute("col")); //returns column
-             const ship = player.board.getShip(name); //returns ship
-             // console.log(player.board.placeShip(ship, parseInt(row), parseInt(col)));
- 
-             if(player.board.grid[row][col] === null)
-             {
-                 //place the ship
-                 return player.placeShip(ship, row, col);
- 
-             } else {
-                 //selects the ship
-                 return("There is a ship located there.  Place another square.");
-             }
-         }
-         getSquares.forEach((item) =>{
+        //remove window box and activates squares
+        const getSquares = document.querySelector(".gameboard").childNodes;
 
-             item.addEventListener(("click"), placeShipToBoard);
-         })
-     }
+        const placeShipToBoard = (e, ship) => {
+            const row = parseInt(e.target.getAttribute("row")); //returns row
+            const col = parseInt(e.target.getAttribute("col")); //returns column
+            // const ship = player.board.getShip(name); //returns ship
+            // console.log(player.board.placeShip(ship, parseInt(row), parseInt(col)));
+
+            if(player.board.grid[row][col] === null)
+            {
+                //place the ship
+                return player.placeShip(ship, row, col, orientation);
+
+            } else {
+                //selects the ship
+                return("There is a ship located there.  Place another square.");
+            }
+        }
+        getSquares.forEach((item) =>{
+
+            item.addEventListener(("click"), (e) => placeShipToBoard(e, ship));
+        })
+
+    }
+     static userSelectShip = (player, name) =>{
+        let dragged;
+        // loadVerticalHorizontalBtns();
+        // document.querySelectorAll(".ver-hor-btn button").forEach((button) => button.addEventListener(("click"), (e) => this.activateSquares(player, name, e)));
+        document.querySelectorAll(".draggable").forEach((button) => {
+                button.addEventListener("drag", (event) =>{
+                    console.log("dragging");
+                });
+                button.addEventListener(("dragstart"), (event) => {
+                    dragged = event.target;
+                    event.target.classList.add("dragging");
+                    console.log(dragged);
+                });
+                button.addEventListener(("dragend"), (event) =>{
+                    event.target.classList.remove("dragging");
+                });
+
+            }
+        );
+        document.querySelectorAll(".square").forEach((target) =>{
+            target.addEventListener("dragover",
+                (event) =>{
+                    event.preventDefault();
+                }, 
+                false,
+            );
+            target.addEventListener("dragenter", (event) =>{
+                if(event.target.classList.contains("dropzone")){
+                    event.target.classList.add("dragover");
+                }
+            });
+            target.addEventListener("dragleave", event =>{
+                if(event.target.classList.contains("dropzone")){
+                    event.target.classList.remove("dragover");
+                }
+            });
+
+        })
+    }
  
      static setupGame = (game, playerTurn) =>{
         const player = playerTurn === "player 1" ? game.player1 : game.player2;
@@ -69,16 +123,20 @@ export default class GameSetup{
         const clearBtn = document.getElementById("clear-board");
         const doneBtn = document.querySelector(".start-btn");
         const shipBtns = document.querySelectorAll(".ship-btn");
-        shipBtns.forEach((shipBtn => shipBtn.addEventListener(("click"), () => this.activateSquare(player, shipBtn.value))));
+        shipBtns.forEach((shipBtn => shipBtn.addEventListener(("click"), () => this.userSelectShip(player, shipBtn.value))));
          
         randomPlacementBtn.addEventListener(("click"), () => plotAllShipsRandomly(player));
         clearBtn.addEventListener(("click"), () => clearBoard(player));
         doneBtn.addEventListener(("click"), () => this.finishedSetupBtn(game, playerTurn));
+        console.log(player.board.isAllShipsDeployed());
+
         return player;
      }
  
      static finishedSetupBtn = (game, playerTurn) =>{
-         document.getElementById("root").removeChild(document.querySelector(".setup-menu"));
+ 
+         removeWindow(".setup-menu");
+
         if(game.player2.isHuman && playerTurn === "player 1"){
             this.setupGame(game, "player 2")
         } else{
@@ -90,15 +148,12 @@ export default class GameSetup{
             this.play(game);
         } 
      }
-     static reset = (game) => {
-        console.log("reset");
-
+     static reset = (game, window) => {
         game.player1.board.reset();
         game.player2.board.reset();
-        console.log(game.player1.board);
         game.winner = null;
         game.turn = 1;
-        document.getElementById("root").removeChild(document.querySelector(".playerBoard"));
+        removeWindow(window);
         //loads setup menu
         this.setupGame(game, "player 1");
      }
@@ -107,26 +162,18 @@ export default class GameSetup{
         const getRoot =  document.getElementById("root");
 
         if(game.winner != null){
-            console.log(game.winner);
-            alert(game.winner);
-            getRoot.removeChild(document.querySelector(".playerBoard"));
+            // removeWindow(".playerBoard");
             //Need to test this code.
             getRoot.appendChild(loadPlayAgainMenu(game.getAttacker().name, game.getReceiver().name));
-            document.getElementById("play-again").addEventListener(("click"), ()=> this.reset(game));            
+            document.getElementById("play-again").addEventListener(("click"), ()=> this.reset(game, ".menu-box"));       
+            return;     
         }
-        if(game.getReceiver().board.isGameOver())
-            {
-                game.winner = game.getAttacker();
-                this.play(game);
-            }
-
+   
         //Whoever is the attacker
         getRoot.appendChild(plotGame(game));
         updateBoard(game.getReceiver());
         if(game.getAttacker().isHuman)
         {            
-            document.getElementById("play-again").addEventListener(("click"), () => this.reset(game));
-
             //load previous moves if any
             const squares = document.querySelectorAll(".square");
             squares.forEach((item) =>{
@@ -142,7 +189,8 @@ export default class GameSetup{
                     const col = e.currentTarget.getAttribute("col");
                     game.getAttacker().attack(game.getReceiver().name, row, col);
                     getRoot.removeChild(document.querySelector(".playerBoard"));
-                    game.nextTurn();
+                    game.getReceiver().board.isGameOver() ? game.setWinner(game.getAttacker().name) : game.nextTurn();
+                    // game.nextTurn();
                     this.play(game);
                 });
             });
@@ -152,7 +200,9 @@ export default class GameSetup{
             game.getAttacker().randomAttack(game.getReceiver().name);
             setTimeout(() =>{
                 getRoot.removeChild(document.querySelector(".playerBoard"));
-                game.nextTurn();
+                game.getReceiver().board.isGameOver() ? game.setWinner(game.getAttacker().name) : game.nextTurn();
+
+                // game.nextTurn();
                 this.play(game);
             }, 1000);
         }

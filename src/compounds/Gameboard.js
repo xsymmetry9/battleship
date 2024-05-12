@@ -9,10 +9,9 @@ class Gameboard{
       new Ship("Aircraft Carrier", 5),
       new Ship("Destroyer", 7),
       new Ship("Cruiser", 3),
-      new Ship("Combat Ship", 1)   
+      new Ship("Submarine", 4)   
     ];
   }
-
   reset(){
     this.clearGrid();
     this.isAllShipsDeployed();
@@ -23,8 +22,8 @@ class Gameboard{
     this.changeAllShiptoNotDeployed();
   }
   //Checks if there are any ships on the board and if it fits.
-  isValid(ship, row, col){
-    if(ship.orientation === "horizontal"){
+  isValid(ship, row, col, orientation){
+    if(orientation === "horizontal"){
       if(col + ship.length > this.cols)
       {
         return false // "Error: Ship doesn't fit horizontally.";
@@ -40,7 +39,7 @@ class Gameboard{
         return true; //Pass all test
       }
         
-    } else if(ship.orientation === "vertical") {
+    } else if(orientation === "vertical") {
         if(row + ship.length > this.rows) {
           return false //"Ship doesn't fit vertically"; //Ship doesn't fit.
           } else {
@@ -62,11 +61,11 @@ class Gameboard{
     }
   }
 //Places the ship on the board.
-  placeShip(ship, row, col){
-    if(!this.isValid(ship, row, col))
-    return ship.deploy;
+  placeShip(ship, row, col, orientation){
+    if(!this.isValid(ship, row, col, orientation))
+    return ship.deploy; //false
     
-    if(ship.orientation === "horizontal")
+    if(orientation === "horizontal")
       {
         //checks for overlaps or out of bounds
         for(let index = 0; index < ship.length; index++)
@@ -75,7 +74,7 @@ class Gameboard{
         }
         ship.deploy = true;
         return ship.deploy;
-      } else if(ship.orientation === "vertical"){ //direction is horizontal
+      } else if(orientation === "vertical"){ //direction is horizontal
         //if everything passes, place the ship vertically
         for(let index = 0; index < ship.length; index++){
           this.grid[row + index][col] = ship;

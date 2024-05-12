@@ -147,7 +147,6 @@ const plotGame = (game) =>{
     container.appendChild(plotBanner(`${game.getAttacker().name}`));
     container.appendChild(middleSection(game.getReceiver().board.ships));
     container.appendChild(loadBoard(game.getReceiver()));
-    container.appendChild(playAgainButton());
     container.appendChild(plotTextBox(`${game.getAttacker().name}'s turn to attack ${game.getReceiver().name}`));
 
 return container;
@@ -172,6 +171,20 @@ const loadPlayAgainMenu =(winner, loser) =>{
 
     return playAgainMenu;
 }
+const loadVerticalHorizontalBtns = () =>{
+            //opens vertical or horizonal window
+            const createWindow = document.createElement("div");
+            createWindow.className = "ver-hor-btn";
+            const verticalBtn = document.createElement("button");
+            verticalBtn.setAttribute("id", "vertical");
+            verticalBtn.textContent = "vertical";
+            const horizontalBtn = document.createElement("button");
+            horizontalBtn.setAttribute("id", "horizontal");
+            horizontalBtn.textContent = "horizontal";
+    
+            [verticalBtn, horizontalBtn].forEach((item) => createWindow.appendChild(item)); 
+            document.querySelector(".setup-menu").appendChild(createWindow);
+}
 
 
 export {
@@ -188,5 +201,6 @@ export {
     plotBanner,
     updateBoard,
     loadBoard,
-    loadPlayAgainMenu
+    loadPlayAgainMenu,
+    loadVerticalHorizontalBtns
 }

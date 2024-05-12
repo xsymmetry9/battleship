@@ -35,8 +35,7 @@ export const loadBoard = (player) =>{
             for (let j = 0; j<getGameboard.cols; j++)
             {
                 const square = document.createElement("div");
-                square.className = "square";
-
+                square.className = "square dropzone";
                 square.setAttribute("row", i);
                 square.setAttribute("col", j);
                 square.setAttribute("id", `${player.name.toLowerCase()}-${i}-${j}`);
@@ -73,10 +72,11 @@ export const shipMenu = (player) => {
         container.className = "ship-buttons";
    
         player.board.ships.forEach((ship) => {
-            const createBtn = document.createElement("button");
-            createBtn.className = "ship-btn";
+            const createBtn = document.createElement("div");
+            createBtn.className = "ship-btn draggable";
             createBtn.setAttribute("id", ship.id);
             createBtn.setAttribute("value", ship.name);
+            createBtn.setAttribute("draggable", true);
             createBtn.textContent = ship.name;
     
             // createBtn.addEventListener("click", (e) => handleLoadShipBtn(e, player));
@@ -137,6 +137,9 @@ class Game{
     nextTurn(){
         this.turn++;
         return this.turn;
+    }
+    setWinner(winner){
+        this.winner = winner;
     }
 
     loadSetupUI(player){
