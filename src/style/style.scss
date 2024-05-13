@@ -96,6 +96,9 @@ button:hover, button:focus{
 .dragging{
   background-color: green;
 }
-.dragover{
-  background-color: green;
+.invalid{
+  background-color: lightcoral;
+}
+.valid{
+ background-color: lightgreen;
 }
