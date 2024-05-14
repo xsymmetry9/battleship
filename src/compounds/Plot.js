@@ -43,7 +43,7 @@ const plotMessage = (message) =>{
 
 const removeRender = (player) =>{
     const squares = document.getElementById(player).childNodes;
-    squares.forEach((square) => {square.className = "square"});
+    squares.forEach((square) => {square.className = "square dropzone"});
 
 }
 const plotAllShipsRandomly = (player) => player.board.ships.forEach((ship) => plotRandomPlacement(player, ship));

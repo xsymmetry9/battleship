@@ -45,52 +45,38 @@ export default class GameSetup{
             return "error";
        }
     }
-    static activateSquares = (player, name, e) =>{
-        document.querySelector(".setup-menu").removeChild(document.querySelector(".ver-hor-btn"));
-        const orientation = e.currentTarget.id;
-        const ship = player.board.getShip(name); //returns ship
-        // ship.setOrientation(orientation);
-
+    static activateSquares = (player) =>{
         //remove window box and activates squares
         const getSquares = document.querySelector(".gameboard").childNodes;
 
-        const placeShipToBoard = (e, ship) => {
-            const row = parseInt(e.target.getAttribute("row")); //returns row
-            const col = parseInt(e.target.getAttribute("col")); //returns column
-            // const ship = player.board.getShip(name); //returns ship
-            // console.log(player.board.placeShip(ship, parseInt(row), parseInt(col)));
-
-            if(player.board.grid[row][col] === null)
-            {
-                //place the ship
-                return player.placeShip(ship, row, col, orientation);
-
-            } else {
-                //selects the ship
-                return("There is a ship located there.  Place another square.");
-            }
-        }
         getSquares.forEach((item) =>{
 
-            item.addEventListener(("click"), (e) => placeShipToBoard(e, ship));
+            console.log(item);
+            item.addEventListener(("click"), e => console.log(e.currentTarget));
         })
 
     }
     static userSelectShip = (player) =>{
         let draggedShip;
+
+        document.querySelectorAll(".ship-btn").forEach((button) =>{
+            !player.board.getShip(button.getAttribute("value")).deploy ? 
+                button.setAttribute("draggable", true) : button.setAttribute("draggable", false);
+        }) 
        
         document.querySelectorAll(".draggable").forEach((button) => {
-            console.log(player.board.getShip(button.getAttribute("value")));
                 button.addEventListener(("dragstart"), (e) => {
-                    draggedShip = player.board.getShip(e.target.getAttribute("value"));
-                    e.target.classList.add("dragging");
+                    draggedShip = player.board.getShip(e.currentTarget.getAttribute("value"));
+                    e.currentTarget.classList.add("valid");
                 });
                 button.addEventListener(("dragend"), (e) =>{
                     e.preventDefault();
-                    e.target.classList.remove("dragging");
-                });
+                    //Removes the render of the selected button
+                    e.currentTarget.classList.remove("valid");
 
+                });
             }
+         
         );
         document.querySelectorAll(".square").forEach((target) =>{
             target.addEventListener("dragover",
@@ -100,30 +86,34 @@ export default class GameSetup{
                 false,
             );
             target.addEventListener("dragenter", (e) =>{
-                const row = parseInt(e.target.getAttribute("row")); //returns row
-                const col = parseInt(e.target.getAttribute("col")); //returns column
+                const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
+                const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
                 console.log(player.board.isValid(draggedShip, row, col, "horizontal"));
-                if(e.target.classList.contains("dropzone")){
-                    player.board.isValid(draggedShip, row, col, "horizontal") ? e.target.classList.add("valid") : e.target.classList.add("invalid");
+                if(e.currentTarget.classList.contains("dropzone")){
+                    player.board.isValid(draggedShip, row, col, "horizontal") ? e.currentTarget.classList.add("valid") : e.currentTarget.classList.add("invalid");
                 }
             });
             target.addEventListener("dragleave", e =>{
-                const row = parseInt(e.target.getAttribute("row")); //returns row
-                const col = parseInt(e.target.getAttribute("col")); //returns column
+
+                const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
+                const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
                 console.log(player.board.isValid(draggedShip, row, col, "horizontal"));
-                if(e.target.classList.contains("dropzone")){
-                    player.board.isValid(draggedShip, row, col, "horizontal") ? e.target.classList.remove("valid") : e.target.classList.remove("invalid");
+                if(e.currentTarget.classList.contains("dropzone")){
+                    player.board.isValid(draggedShip, row, col, "horizontal") ? e.currentTarget.classList.remove("valid") : e.currentTarget.classList.remove("invalid");
                 }
             });
 
             target.addEventListener("drop", e => {
-                const row = parseInt(e.target.getAttribute("row")); //returns row
-                const col = parseInt(e.target.getAttribute("col")); //returns column
+                const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
+                const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
 
             if(player.board.grid[row][col] === null)
             {
                 //place the ship and plots it
-                return player.placeShip(draggedShip, row, col, "horizontal");
+                const orientation = "horizontal"
+                player.placeShip(draggedShip, row, col, orientation);
+                this.userSelectShip(player);
+
 
             } else {
                 //selects the ship
@@ -145,7 +135,10 @@ export default class GameSetup{
         this.userSelectShip(player); //adds handler
          
         randomPlacementBtn.addEventListener(("click"), () => plotAllShipsRandomly(player));
-        clearBtn.addEventListener(("click"), () => clearBoard(player));
+        clearBtn.addEventListener(("click"), () => {
+            clearBoard(player);
+            this.userSelectShip(player);
+        });
         doneBtn.addEventListener(("click"), () => this.finishedSetupBtn(game, playerTurn));
 
         return player;
