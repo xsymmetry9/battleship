@@ -1,39 +1,45 @@
 const plotShips = (boardName, gameboard) =>{
     const getSquares = document.getElementById(boardName.toLowerCase()).childNodes;
     
-    getSquares.forEach((item) =>{
-        const col = item.getAttribute("col");
-        const row = item.getAttribute("row");
+    getSquares.forEach((square) =>{
+        const col = square.getAttribute("col");
+        const row = square.getAttribute("row");
         if(gameboard.grid[row][col] !== null)
         {
-            item.classList.add("ship");
+            square.classList.add("ship");
         }
     })
     return getSquares;
 }
-const plotShip = (name, row, col, length, orientation) =>{
-    console.log({
-        name: name,
-        row: row,
-        col: col,
-        orientation: orientation
-    })
+const plotShip = (name, ship, row, col, orientation, board) =>{
 
     if(orientation === "horizontal")
     {
-        for(let index = 0; index < length; index++){
-            const createId = document.getElementById(`${name.toLowerCase()}-${row}-${col + index}`);
-            createId.removeEventListener(("click"), e =>{console.log(e.currentTarget)});
-            createId.classList.add("ship");
+        for(let index = 0; index < ship.length; index++){
+            const square = document.getElementById(`${name.toLowerCase()}-${row}-${col + index}`);
+            square.classList.add("ship");
+            addHandlerOrientation(ship, square, board);
         }
+        return {name: name, row: row, col: col, orientation: orientation}
+
     } else if(orientation === "vertical") {
-        for(let index = 0; index < length; index++){
+        for(let index = 0; index < ship.length; index++){
             const createId = document.getElementById(`${name.toLowerCase()}-${row + index}-${col}`);
             createId.classList.add("ship");
+            addHandlerOrientation(ship, square, board);
         }
+        return {name: name, row: row, col: col, orientation: orientation};
     } else {
         return "Plotting didn't work."
     }
+}
+const addHandlerOrientation = (ship, square, board) =>{
+    square.addEventListener(("click"), e => {
+        const start = ship.coordinate[0];
+        ship.deleteCoordinates();
+        console.log(ship);
+        // console.log(board);
+    });
 }
 
 const plotMessage = (message) =>{
@@ -171,20 +177,6 @@ const loadPlayAgainMenu =(winner, loser) =>{
 
     return playAgainMenu;
 }
-const loadVerticalHorizontalBtns = () =>{
-            //opens vertical or horizonal window
-            const createWindow = document.createElement("div");
-            createWindow.className = "ver-hor-btn";
-            const verticalBtn = document.createElement("button");
-            verticalBtn.setAttribute("id", "vertical");
-            verticalBtn.textContent = "vertical";
-            const horizontalBtn = document.createElement("button");
-            horizontalBtn.setAttribute("id", "horizontal");
-            horizontalBtn.textContent = "horizontal";
-    
-            [verticalBtn, horizontalBtn].forEach((item) => createWindow.appendChild(item)); 
-            document.querySelector(".setup-menu").appendChild(createWindow);
-}
 
 
 export {
@@ -202,5 +194,4 @@ export {
     updateBoard,
     loadBoard,
     loadPlayAgainMenu,
-    loadVerticalHorizontalBtns
 }

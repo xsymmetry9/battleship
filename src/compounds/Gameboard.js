@@ -71,6 +71,7 @@ class Gameboard{
         for(let index = 0; index < ship.length; index++)
          {
            this.grid[row][col + index] = ship;
+           ship.coordinate.push([row, col + index]);
         }
         ship.deploy = true;
         return ship.deploy;
@@ -78,6 +79,8 @@ class Gameboard{
         //if everything passes, place the ship vertically
         for(let index = 0; index < ship.length; index++){
           this.grid[row + index][col] = ship;
+          ship.coordinate.push([row + index, col]);
+
         }
         ship.deploy = true;
         return ship.deploy;

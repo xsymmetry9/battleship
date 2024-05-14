@@ -9,7 +9,6 @@ import {
     plotShips,
     plotAllShipsRandomly,
     loadPlayAgainMenu,
-    loadVerticalHorizontalBtns
     } from '../compounds/Plot'
 
 const removeWindow = (item) =>{
@@ -45,17 +44,6 @@ export default class GameSetup{
             return "error";
        }
     }
-    static activateSquares = (player) =>{
-        //remove window box and activates squares
-        const getSquares = document.querySelector(".gameboard").childNodes;
-
-        getSquares.forEach((item) =>{
-
-            console.log(item);
-            item.addEventListener(("click"), e => console.log(e.currentTarget));
-        })
-
-    }
     static userSelectShip = (player) =>{
         let draggedShip;
 
@@ -88,7 +76,6 @@ export default class GameSetup{
             target.addEventListener("dragenter", (e) =>{
                 const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
                 const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
-                console.log(player.board.isValid(draggedShip, row, col, "horizontal"));
                 if(e.currentTarget.classList.contains("dropzone")){
                     player.board.isValid(draggedShip, row, col, "horizontal") ? e.currentTarget.classList.add("valid") : e.currentTarget.classList.add("invalid");
                 }
@@ -97,7 +84,6 @@ export default class GameSetup{
 
                 const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
                 const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
-                console.log(player.board.isValid(draggedShip, row, col, "horizontal"));
                 if(e.currentTarget.classList.contains("dropzone")){
                     player.board.isValid(draggedShip, row, col, "horizontal") ? e.currentTarget.classList.remove("valid") : e.currentTarget.classList.remove("invalid");
                 }
@@ -134,7 +120,9 @@ export default class GameSetup{
         //User is allowed to click and drag the ship to the board
         this.userSelectShip(player); //adds handler
          
-        randomPlacementBtn.addEventListener(("click"), () => plotAllShipsRandomly(player));
+        randomPlacementBtn.addEventListener(("click"), () => {
+            plotAllShipsRandomly(player);
+        });
         clearBtn.addEventListener(("click"), () => {
             clearBoard(player);
             this.userSelectShip(player);

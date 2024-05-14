@@ -38,9 +38,12 @@
   border-bottom: none;
 }
 
-.square:hover{
-  cursor: pointer;
+.ship:hover{
+  cursor: crosshair;
   background-color: base.$light;
+}
+.ship-btn:hover{
+cursor: crosshair;
 }
 
 .board-container{
@@ -55,7 +58,6 @@
     gap: 10px;
     width: 150px;
   }
-
 
 .ship{
   background-color: brown;

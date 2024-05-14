@@ -21,7 +21,7 @@ class Player {
   placeShip(ship, row, col, orientation)
   {
     if (!ship.deploy && this.board.placeShip(ship, row, col, orientation)){
-      return plotShip(this.name, row, col, ship.length, orientation);
+      return plotShip(this.name, ship, row, col, orientation, this.board);
 
     } else {
       return "Ship has already been deployed.  Tried again"
