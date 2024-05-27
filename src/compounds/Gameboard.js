@@ -100,6 +100,14 @@ class Gameboard{
       });
       return result;
     }
+    deleteShip(shipName){
+      shipName.coordinate.forEach((item) =>{
+        const row = item[0];
+        const col = item[1];
+        this.grid[row][col] = null;
+      })
+      return this.grid;
+    }
   //Places an attack on the board.
   receiveAttack(x, y){
     

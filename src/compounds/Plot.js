@@ -34,11 +34,35 @@ const plotShip = (name, ship, row, col, orientation, board) =>{
     }
 }
 const addHandlerOrientation = (ship, square, board) =>{
-    square.addEventListener(("click"), e => {
-        const start = ship.coordinate[0];
-        ship.deleteCoordinates();
-        console.log(ship);
-        // console.log(board);
+    square.addEventListener(("click"), () => toggleOrientation(ship, board));
+}
+const toggleOrientation = (ship, board) =>{
+    const row = ship.coordinate[0][0];
+    const col = ship.coordinate[0][1];
+    const orientation = ship.orientation === "horizontal" ? "vertical" : "horizontal"; //toggles orientation
+
+    board.deleteShip(ship); //deletes the ship from board
+    if(board.isValid(ship, row, col, orientation)){
+        board.placeShip(ship, row, col, orientation);
+    } else {
+        board.placeShip(ship, row, col, ship.orientation);
+    }
+    updatePlotBoard(ship, board);
+
+}
+
+const updatePlotBoard = (ship, board) =>{
+    console.log(board);
+    board.grid.forEach((row, rowNum) =>{
+        row.forEach((column, colNum) =>{
+            if(column !== null)
+                {
+                    document.getElementById(`gary-${rowNum}-${colNum}`).className = "square ship";
+                } else{
+                    document.getElementById(`gary-${rowNum}-${colNum}`).className = "square dropzone";
+                }
+
+        });
     });
 }
 
