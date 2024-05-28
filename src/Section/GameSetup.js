@@ -6,6 +6,7 @@ import {
     plotGame,
     clearBoard,
     updateBoard,
+    updatePlotBoard,
     plotShips,
     plotAllShipsRandomly,
     loadPlayAgainMenu,
@@ -125,6 +126,7 @@ export default class GameSetup{
          
         randomPlacementBtn.addEventListener(("click"), () => {
             plotAllShipsRandomly(player);
+            console.log(updatePlotBoard(player.board));
         });
         clearBtn.addEventListener(("click"), () => {
             clearBoard(player);

@@ -19,7 +19,7 @@ const randomPlacement = (gameboard, ship) =>{
 
     if (gameboard.isValid(ship, coordinates[0], coordinates[1], orientation))
     {
-      gameboard.placeShip(ship, coordinates[0], coordinates[1], orientation);
+      return gameboard.placeShip(ship, coordinates[0], coordinates[1], orientation);
     } else {
       randomPlacement(gameboard, ship);
     }

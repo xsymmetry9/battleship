@@ -1,3 +1,5 @@
+import {randomPlacement} from "./Random";
+
 const plotShips = (boardName, gameboard) =>{
     const getSquares = document.getElementById(boardName.toLowerCase()).childNodes;
     
@@ -36,6 +38,7 @@ const plotShip = (name, ship, row, col, orientation, board) =>{
 const addHandlerOrientation = (ship, square, board) =>{
     square.addEventListener(("click"), () => toggleOrientation(ship, board));
 }
+
 const toggleOrientation = (ship, board) =>{
     const row = ship.coordinate[0][0];
     const col = ship.coordinate[0][1];
@@ -48,19 +51,23 @@ const toggleOrientation = (ship, board) =>{
     } else {
         board.placeShip(ship, row, col, ship.orientation);
     }
-    updatePlotBoard(ship, board);
+    updatePlotBoard(board);
 
 }
 
-const updatePlotBoard = (ship, board) =>{
-    console.log(board);
+const updatePlotBoard = (board) =>{
     board.grid.forEach((row, rowNum) =>{
         row.forEach((column, colNum) =>{
+            const square = document.getElementById(`gary-${rowNum}-${colNum}`);
             if(column !== null)
                 {
-                    document.getElementById(`gary-${rowNum}-${colNum}`).className = "square ship";
+                    square.className = "square ship";
+                    square.addEventListener(("click"), () =>{
+                        //selects the ship if user wants to change ship'sorientation
+                        //***code goes here */
+                        console.log("selected")});
                 } else{
-                    document.getElementById(`gary-${rowNum}-${colNum}`).className = "square dropzone";
+                    square.className = "square dropzone";
                 }
 
         });
@@ -77,18 +84,21 @@ const removeRender = (player) =>{
     squares.forEach((square) => {square.className = "square dropzone"});
 
 }
-const plotAllShipsRandomly = (player) => player.board.ships.forEach((ship) => plotRandomPlacement(player, ship));
+const plotAllShipsRandomly = (player) => 
+    {
+        player.board.ships.forEach((ship) =>{
+            if(!ship.deploy)
+                {
+                console.log("not deployed");
+                randomPlacement(player.board, ship);
+                }
+            else{
+                console.log(ship);
+            }
+        });
 
-const plotRandomPlacement = (player) =>{   
-    if(!player.board.isAllShipsDeployed()){
-        player.placeRandomToBoard();
-        plotShips(player.name.toLowerCase(), player.board);  
-        return player.board.isAllShipsDeployed(); //returns true
-    } else{
-        clearBoard(player);
-        plotRandomPlacement(player);
+        return player.board;
     }
-}
 
 const clearBoard = (player) =>{
     player.board.clearGrid();
@@ -210,13 +220,13 @@ export {
     plotMessage, 
     removeRender,
     plotAllShipsRandomly,
-    plotRandomPlacement, 
     removeAllChildNodes, 
     clearBoard,
     plotGame,
     plotTextBox,
     plotBanner,
     updateBoard,
+    updatePlotBoard,
     loadBoard,
     loadPlayAgainMenu,
 }
