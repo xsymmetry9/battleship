@@ -44,6 +44,7 @@ const toggleOrientation = (ship, board) =>{
     board.deleteShip(ship); //deletes the ship from board
     if(board.isValid(ship, row, col, orientation)){
         board.placeShip(ship, row, col, orientation);
+        ship.setOrientation(orientation);
     } else {
         board.placeShip(ship, row, col, ship.orientation);
     }

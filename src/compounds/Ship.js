@@ -12,29 +12,16 @@ class Ship{
     this.deploy = false;
   }
   
-  hit(){
-    this.hits++;
-  }
+  hit = () => this.hits++;
 
-  isSunk(){
+  isSunk = () => this.length - this.hits === 0 ? true : false;
 
-    if((this.length - this.hits) === 0)
-    {
-      console.log(`${this.name} has been sunk`);
-      return true 
-    } else {
-      console.log(`${this.name} has been hit ${this.hits} time.`);
-      return false;
-    }
-  }
-  deleteCoordinates(){
-    return this.coordinate.splice(0, this.coordinate.length); //returns an empty array 
-  }
-  toggleOrientation(){
-    this.orientation = this.orientation === "horizontal" ? "vertical" : "horizontal";
-    
-    return this.orientation;
-  }
+  deleteCoordinates = () => this.coordinate.splice(0, this.coordinate.length); //returns an empty array 
+  
+  toggleOrientation = () => this.orientation === "horizontal" ? this.setOrientation("vertical") : this.setOrientation("horizontal");
+
+  setOrientation = (newOrientation) => this.orientation = newOrientation;
+  
 }
 
 export default Ship;

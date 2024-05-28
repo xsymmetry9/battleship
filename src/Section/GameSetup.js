@@ -61,10 +61,8 @@ export default class GameSetup{
                     e.preventDefault();
                     //Removes the render of the selected button
                     e.currentTarget.classList.remove("valid");
-
                 });
             }
-         
         );
         document.querySelectorAll(".square").forEach((target) =>{
             target.addEventListener("dragover",
@@ -90,6 +88,13 @@ export default class GameSetup{
             });
 
             target.addEventListener("drop", e => {
+                const check = ["valid", "invalid"];
+
+                check.forEach((item) => {
+                    if(e.currentTarget.classList.contains("valid") || e.currentTarget.classList.contains("invalid")){
+                        e.currentTarget.classList.remove(item);
+                    } 
+                });
                 const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
                 const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
 
@@ -100,13 +105,11 @@ export default class GameSetup{
                 player.placeShip(draggedShip, row, col, orientation);
                 this.userSelectShip(player);
 
-
             } else {
                 //selects the ship
                 return("There is a ship located there.  Place another square.");
             }
             })
-
         })
     }
  
