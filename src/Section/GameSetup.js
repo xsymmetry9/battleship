@@ -126,7 +126,7 @@ export default class GameSetup{
          
         randomPlacementBtn.addEventListener(("click"), () => {
             plotAllShipsRandomly(player);
-            console.log(updatePlotBoard(player.board));
+            console.log(updatePlotBoard(player));
         });
         clearBtn.addEventListener(("click"), () => {
             clearBoard(player);

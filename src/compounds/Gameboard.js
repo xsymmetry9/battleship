@@ -89,6 +89,10 @@ class Gameboard{
       }
 
     } 
+    getShipInfo(row, col)
+    {
+      return this.grid[row][col];
+    }
     getShip(shipName){
       let result;
       this.ships.forEach((ship) => {
