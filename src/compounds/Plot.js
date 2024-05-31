@@ -20,7 +20,7 @@ const plotShip = (name, ship, row, col, orientation, board) =>{
         for(let index = 0; index < ship.length; index++){
             const square = document.getElementById(`${name.toLowerCase()}-${row}-${col + index}`);
             square.classList.add("ship");
-            addHandlerOrientation(ship, board, square);
+            // addHandlerOrientation(ship, board, square);
         }
         return {name: name, row: row, col: col, orientation: orientation}
 
@@ -28,30 +28,33 @@ const plotShip = (name, ship, row, col, orientation, board) =>{
         for(let index = 0; index < ship.length; index++){
             const createId = document.getElementById(`${name.toLowerCase()}-${row + index}-${col}`);
             createId.classList.add("ship");
-            addHandlerOrientation(ship, board, square);
+            // addHandlerOrientation(ship, board, square);
         }
         return {name: name, row: row, col: col, orientation: orientation};
     } else {
         return "Plotting didn't work."
     }
 }
-const addHandlerOrientation = (ship, player, square) =>{
-    square.addEventListener(("click"), () => toggleOrientation(ship, player));
+const addHandlerOrientation = (square) =>{
+    square.addEventListener(("click"), () => toggleOrientation());
 }
 
-const toggleOrientation = (ship, player) =>{
-    const board = player.board;
-    const row = ship.coordinate[0][0];
-    const col = ship.coordinate[0][1];
-    const orientation = ship.orientation === "horizontal" ? "vertical" : "horizontal"; //toggles orientation
+const toggleOrientation = () =>{
+    console.log("clicked");
+    // const board = player.board;
+    // const row = ship.coordinate[0][0];
+    // const col = ship.coordinate[0][1];
+    // const orientation = ship.orientation === "horizontal" ? "vertical" : "horizontal"; //toggles orientation
 
-    console.log(board);
+    // board.deleteShip(ship);
 
     // if(board.isValid(ship, row, col, orientation)){
     //     board.placeShip(ship, row, col, orientation);
     //     ship.setOrientation(orientation);
+    //     console.log(ship);
     // } else {
     //     board.placeShip(ship, row, col, ship.orientation);
+    //     console.log("not changed");
     // }
     // updatePlotBoard(player);
 
@@ -66,7 +69,6 @@ const updatePlotBoard = (player) =>{
                 {
                     square.className = "square ship";
                     const ship = player.board.getShipInfo(rowNum, colNum);
-                    addHandlerOrientation(ship, player, square);
                 } else{
                     square.className = "square dropzone";
                 }
@@ -230,4 +232,5 @@ export {
     updatePlotBoard,
     loadBoard,
     loadPlayAgainMenu,
+    addHandlerOrientation
 }

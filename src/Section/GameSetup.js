@@ -2,6 +2,7 @@ import Board from "../compounds/Gameboard";
 import Game from "../compounds/Game";
 import Player from "../compounds/Player";
 import {randomPlacement} from "../compounds/Random";
+import {addBoardHandler} from "../compounds/Functions";
 import { 
     plotGame,
     clearBoard,
@@ -99,12 +100,15 @@ export default class GameSetup{
                 const row = parseInt(e.currentTarget.getAttribute("row")); //returns row
                 const col = parseInt(e.currentTarget.getAttribute("col")); //returns column
 
-            if(player.board.grid[row][col] === null)
+            if(player.board.grid[row][col] === null && player.board.isValid(draggedShip, row, col, draggedShip.orientation))
             {
                 //place the ship and plots it
-                const orientation = "horizontal"
-                player.placeShip(draggedShip, row, col, orientation);
-                this.userSelectShip(player);
+                // const orientation = "horizontal"
+                // player.placeShip(draggedShip, row, col, orientation);
+                player.board.placeShip(draggedShip, row, col, draggedShip.orientation);
+                updatePlotBoard(player);
+                // this.userSelectShip(player);
+                console.log("valid");
 
             } else {
                 //selects the ship
@@ -117,6 +121,9 @@ export default class GameSetup{
      static setupGame = (game, playerTurn) =>{
         const player = playerTurn === "player 1" ? game.player1 : game.player2;
         game.loadSetupUI(player);
+        //add game handler
+        addBoardHandler(player);
+
         const randomPlacementBtn = document.getElementById("random-placement");
         const clearBtn = document.getElementById("clear-board");
         const doneBtn = document.querySelector(".start-btn");
