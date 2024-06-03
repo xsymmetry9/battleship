@@ -89,11 +89,11 @@ class Gameboard{
       }
 
     } 
-    getShipInfo(row, col)
+  getShipInfo(row, col)
     {
       return this.grid[row][col];
     }
-    getShip(shipName){
+  getShip(shipName){
       let result;
       this.ships.forEach((ship) => {
         if(ship.name === shipName) {
@@ -104,7 +104,7 @@ class Gameboard{
       });
       return result;
     }
-    deleteShip(shipName){
+  deleteShip(shipName){
       shipName.coordinate.forEach((item) =>{
         const row = item[0];
         const col = item[1];

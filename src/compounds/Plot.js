@@ -1,236 +1,141 @@
-import {randomPlacement} from "./Random";
+import { randomPlacement } from "./Random";
 
-const plotShips = (boardName, gameboard) =>{
-    const getSquares = document.getElementById(boardName.toLowerCase()).childNodes;
-    
-    getSquares.forEach((square) =>{
-        const col = square.getAttribute("col");
-        const row = square.getAttribute("row");
-        if(gameboard.grid[row][col] !== null)
-        {
-            square.classList.add("ship");
-        }
-    })
-    return getSquares;
-}
-const plotShip = (name, ship, row, col, orientation, board) =>{
+const plotShip = (name, ship, row, col, orientation, board) => {
+  const addShipClass = (elementId) => {
+    const square = document.getElementById(elementId);
+    if (square) square.classList.add("ship");
+  };
 
-    if(orientation === "horizontal")
-    {
-        for(let index = 0; index < ship.length; index++){
-            const square = document.getElementById(`${name.toLowerCase()}-${row}-${col + index}`);
-            square.classList.add("ship");
-            // addHandlerOrientation(ship, board, square);
-        }
-        return {name: name, row: row, col: col, orientation: orientation}
-
-    } else if(orientation === "vertical") {
-        for(let index = 0; index < ship.length; index++){
-            const createId = document.getElementById(`${name.toLowerCase()}-${row + index}-${col}`);
-            createId.classList.add("ship");
-            // addHandlerOrientation(ship, board, square);
-        }
-        return {name: name, row: row, col: col, orientation: orientation};
-    } else {
-        return "Plotting didn't work."
+  if (orientation === "horizontal") {
+    for (let index = 0; index < ship.length; index++) {
+      addShipClass(`${name.toLowerCase()}-${row}-${col + index}`);
     }
-}
-const addHandlerOrientation = (square) =>{
-    square.addEventListener(("click"), () => toggleOrientation());
-}
+  } else if (orientation === "vertical") {
+    for (let index = 0; index < ship.length; index++) {
+      addShipClass(`${name.toLowerCase()}-${row + index}-${col}`);
+    }
+  } else {
+    console.error("Invalid orientation");
+    return "Plotting didn't work.";
+  }
+  return { name: name, row: row, col: col, orientation: orientation };
+};
 
-const toggleOrientation = () =>{
-    console.log("clicked");
-    // const board = player.board;
-    // const row = ship.coordinate[0][0];
-    // const col = ship.coordinate[0][1];
-    // const orientation = ship.orientation === "horizontal" ? "vertical" : "horizontal"; //toggles orientation
+const plotShips = (boardName, gameboard) => {
+  const getSquares = document.getElementById(boardName.toLowerCase()).childNodes;
 
-    // board.deleteShip(ship);
+  getSquares.forEach((square) => {
+    const col = square.getAttribute("col");
+    const row = square.getAttribute("row");
+    if (gameboard.grid[row][col] !== null) {
+      square.classList.add("ship");
+    }
+  });
+  return getSquares;
+};
 
-    // if(board.isValid(ship, row, col, orientation)){
-    //     board.placeShip(ship, row, col, orientation);
-    //     ship.setOrientation(orientation);
-    //     console.log(ship);
-    // } else {
-    //     board.placeShip(ship, row, col, ship.orientation);
-    //     console.log("not changed");
-    // }
-    // updatePlotBoard(player);
-
-}
-
-const updatePlotBoard = (player) =>{
-    const getName = player.name.toLowerCase();
-    player.board.grid.forEach((row, rowNum) =>{
-        row.forEach((column, colNum) =>{
-            const square = document.getElementById(`${getName}-${rowNum}-${colNum}`);
-            if(column !== null)
-                {
-                    square.className = "square ship";
-                    const ship = player.board.getShipInfo(rowNum, colNum);
-                } else{
-                    square.className = "square dropzone";
-                }
-
-        });
+const updatePlotBoard = (player) => {
+  const getName = player.name.toLowerCase();
+  player.board.grid.forEach((row, rowNum) => {
+    row.forEach((column, colNum) => {
+      const square = document.getElementById(`${getName}-${rowNum}-${colNum}`);
+      if (square) {
+        square.className = column !== null ? "square ship" : "square dropzone";
+      }
     });
-}
+  });
+};
 
-const plotMessage = (message) =>{
-    const box = document.querySelector(".display-wrapper h2");
-    box.textContent = message;
-}
+const removeRender = (player) => {
+  const squares = document.getElementById(player).childNodes;
+  squares.forEach((square) => { square.className = "square dropzone"; });
+};
 
-const removeRender = (player) =>{
-    const squares = document.getElementById(player).childNodes;
-    squares.forEach((square) => {square.className = "square dropzone"});
-
-}
-const plotAllShipsRandomly = (player) => 
-    {
-        player.board.ships.forEach((ship) =>{
-            if(!ship.deploy)
-                {
-                console.log("not deployed");
-                randomPlacement(player.board, ship);
-                }
-            else{
-                console.log(ship);
-            }
-        });
-
-        return player.board;
+const plotAllShipsRandomly = (player) => {
+  player.board.ships.forEach((ship) => {
+    if (!ship.deploy) {
+      randomPlacement(player.board, ship);
     }
+  });
+  return player.board;
+};
 
-const clearBoard = (player) =>{
-    player.board.clearGrid();
-    player.board.changeAllShiptoNotDeployed();
-    removeRender(player.name.toLowerCase());
-    return player.board.isAllShipsDeployed(); //returns false
-}
+const clearBoard = (player) => {
+  player.board.clearGrid();
+  player.board.changeAllShiptoNotDeployed();
+  removeRender(player.name.toLowerCase());
+  return player.board.isAllShipsDeployed(); // returns false
+};
 
-const removeAllChildNodes = (parent) =>{
-    while(parent.firstChild){
-        console.log(parent);
-        parent.removeChild(parent.firstChild);
+const loadBoard = (player) => {
+  const container = document.createElement("div");
+  container.className = "gameboard";
+  container.setAttribute("id", player.name.toLowerCase());
+
+  for (let i = 0; i < player.board.rows; i++) {
+    for (let j = 0; j < player.board.cols; j++) {
+      const square = document.createElement("div");
+      square.className = "square";
+      square.setAttribute("row", i);
+      square.setAttribute("col", j);
+      square.setAttribute("id", `${player.name.toLowerCase()}-${i}-${j}`);
+      container.appendChild(square);
     }
-}
-const plotBanner = (message) =>{
+  }
+  return container;
+};
 
-    const container = document.createElement("div");
-    // container.className="bottom-spacing-1";
-    const box = document.createElement("div");
-    box.innerHTML = `<h2>${message}</h2>`
-    container.appendChild(box);
-    return container;
-}
-const plotTextBox = (text) =>{
-    const container = document.createElement("div");
-    container.className = "text-box";
-    container.innerHTML = `<p>${text}</p>`;
-    return container;
-}
-const loadBoard = (player) =>{
-    const container = document.createElement("div");
-    container.className = "gameboard";
-    container.setAttribute("id", player.name.toLowerCase());
-   const getGameboard = player.board;
+const updateBoard = (player) => {
+  const getSquares = document.querySelector(".gameboard").childNodes;
 
-       for (let i = 0; i < getGameboard.rows; i++)
-       {
-           for (let j = 0; j<getGameboard.cols; j++)
-           {
-               const square = document.createElement("div");
-               square.className = "square";
+  getSquares.forEach((item) => {
+    const parsedRow = item.getAttribute("row");
+    const parsedCol = item.getAttribute("col");
+    if (player.board.grid[parsedRow][parsedCol] === "hit") {
+      item.classList.add("hit");
+    } else if (player.board.grid[parsedRow][parsedCol] === "miss") {
+      item.classList.add("miss");
+    }
+  });
+};
 
-               square.setAttribute("row", i);
-               square.setAttribute("col", j);
-               square.setAttribute("id", `${player.name.toLowerCase()}-${i}-${j}`);
+// ------------------------------- Plots Game board UI ------------------------------------
+const plotBanner = (message) => {
+  const container = document.createElement("div");
+  const box = document.createElement("div");
+  box.innerHTML = `<h2>${message}</h2>`;
+  container.appendChild(box);
+  return container;
+};
 
-               container.appendChild(square);
-           }
-       }
-       return container;
-   }
-const updateBoard = (player) =>{
-       const getSquares = document.querySelector(".gameboard").childNodes;
+const plotGame = (game) => {
+  const container = document.createElement("div");
+  container.className = "playerBoard";
+  container.appendChild(plotBanner(`${game.getAttacker().name}`));
+  container.appendChild(loadBoard(game.getReceiver()));
+  return container;
+};
 
-       getSquares.forEach((item) => {
-           const parsedRow = item.getAttribute("row");
-           const parsedCol = item.getAttribute("col");
-           if(player.board.grid[parsedRow][parsedCol] === "hit")
-           {
-               item.classList.add("hit");
-           } else if(player.board.grid[parsedRow][parsedCol] === "miss")
-           {
-               item.classList.add("miss");
-           } 
-       });
-   }
-const middleSection = (ships) =>{
-    const container = document.createElement("div");
-    container.className="shipsBox | display-flex-row bottom-spacing-1";
+// ----------------------------------Play again Menu ---------------------------------------
 
-    ships.forEach((ship) => {
-        const createBox = document.createElement("div");
-        createBox.className = "display-flex-row";
-        createBox.innerHTML = `
-        <p>${ship.name}</p>
-        <p>${ship.length - ship.hits}</p>`
-
-        container.appendChild(createBox);
-    });
-
-    return container;
-}
-const plotGame = (game) =>{
-    //game -> returns object of player's board game.receiver();
-    const container = document.createElement("div");
-    container.className = "playerBoard";
-    container.appendChild(plotBanner(`${game.getAttacker().name}`));
-    container.appendChild(middleSection(game.getReceiver().board.ships));
-    container.appendChild(loadBoard(game.getReceiver()));
-    container.appendChild(plotTextBox(`${game.getAttacker().name}'s turn to attack ${game.getReceiver().name}`));
-
-return container;
-
-}
-
-const playAgainButton = () =>{
-    const button = document.createElement("button");
-    button.setAttribute("id", "play-again");
-    button.textContent = "Play again";
-    return button;
-}
-const loadPlayAgainMenu =(winner, loser) =>{
-
-    const playAgainMenu = document.createElement("div");
-    playAgainMenu.className = "menu-box";
-    playAgainMenu.innerHTML = `
+const loadPlayAgainMenu = (winner, loser) => {
+  const playAgainMenu = document.createElement("div");
+  playAgainMenu.className = "menu-box";
+  playAgainMenu.innerHTML = `
     <h2>${winner} has defeated ${loser}</h2>
     <p>Would you like to play again?</p>
     <button class="" id="play-again">Play Again</button>
-    `;
-
-    return playAgainMenu;
-}
-
+  `;
+  return playAgainMenu;
+};
 
 export {
-    plotShips, 
-    plotShip, 
-    plotMessage, 
-    removeRender,
-    plotAllShipsRandomly,
-    removeAllChildNodes, 
-    clearBoard,
-    plotGame,
-    plotTextBox,
-    plotBanner,
-    updateBoard,
-    updatePlotBoard,
-    loadBoard,
-    loadPlayAgainMenu,
-    addHandlerOrientation
-}
+  clearBoard,
+  loadPlayAgainMenu,
+  plotGame,
+  plotShip,
+  plotShips,
+  plotAllShipsRandomly,
+  updateBoard,
+  updatePlotBoard,
+};
