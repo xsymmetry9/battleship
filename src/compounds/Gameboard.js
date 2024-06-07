@@ -162,7 +162,12 @@ class Gameboard{
     return result;
   }
   changeAllShiptoNotDeployed(){
-    this.ships.map((ship) => ship.deploy = false);
+    this.ships.map((ship) => 
+      {
+        ship.deploy = false;
+        ship.deleteCoordinates();
+        ship.setOrientation("horizontal");
+    });
   }
 
 }

@@ -63,8 +63,8 @@ const plotAllShipsRandomly = (player) => {
 const clearBoard = (player) => {
   player.board.clearGrid();
   player.board.changeAllShiptoNotDeployed();
-  removeRender(player.name.toLowerCase());
-  return player.board.isAllShipsDeployed(); // returns false
+  updatePlotBoard(player);
+  return player.board; // returns false
 };
 
 const loadBoard = (player) => {
@@ -108,11 +108,25 @@ const plotBanner = (message) => {
   return container;
 };
 
+// ------------------------------ Play next turn button ---------------------------------------------
+const loadNextTurnSection = () =>{
+  const container = document.createElement("div");
+  container.className = "next-btn";
+  return container;
+}
+
+const nextTurnBtn = () =>{
+  const button = document.createElement("button");
+  button.textContent = "next";
+  button.className = "next";
+  return button;
+}
 const plotGame = (game) => {
   const container = document.createElement("div");
   container.className = "playerBoard";
   container.appendChild(plotBanner(`${game.getAttacker().name}`));
   container.appendChild(loadBoard(game.getReceiver()));
+  container.appendChild(loadNextTurnSection());
   return container;
 };
 
@@ -138,4 +152,5 @@ export {
   plotAllShipsRandomly,
   updateBoard,
   updatePlotBoard,
+  nextTurnBtn
 };

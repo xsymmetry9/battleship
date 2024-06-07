@@ -12,11 +12,6 @@ class Player {
   attack(enemyBoardName, row, col) {
     const plot = document.getElementById(`${enemyBoardName}-${row}-${col}`);
 
-    if (!plot) {
-      console.error("Invalid plot ID");
-      return false;
-    }
-
     if (plot.classList.contains("hit") || plot.classList.contains("miss")) {
       console.warn("Already attacked this position");
       return false;

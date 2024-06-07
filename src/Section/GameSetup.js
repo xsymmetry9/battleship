@@ -11,12 +11,16 @@ import {
     plotShips,
     plotAllShipsRandomly,
     loadPlayAgainMenu,
-    } from '../compounds/Plot'
+    nextTurnBtn,
+    } from '../compounds/Plot';
+
+const getRoot =  document.getElementById("root");
 
 const removeWindow = (item) =>{
     document.getElementById("root").removeChild(document.querySelector(item));
 }
 export default class GameSetup{
+
     static load(){
         this.setup();
     }
@@ -166,8 +170,34 @@ export default class GameSetup{
         this.setupGame(game, "player 1");
      }
 
+     static attack = (e, game) =>{
+        const row = e.currentTarget.getAttribute("row");
+        const col = e.currentTarget.getAttribute("col");
+
+        const id = e.currentTarget.getAttribute("id").split("-");
+        if(id[0] === game.getReceiver().name.toLowerCase())
+            {
+                const result = game.getAttacker().opponentBoard.receiveAttack(row, col);
+
+                result === "hit" ? this.hit(e,game) : this.miss(e, game);
+                this.nextTurn(game);
+                // document.querySelector(".next-btn").appendChild(nextTurnBtn(game.getAttacker()));
+                // document.querySelector(".next").addEventListener(("click"), () => this.nextTurn(game));
+                
+            } else {
+                console.log("it's not your turn");
+                return false;
+            }
+     }
+     static nextTurn = (game) =>{
+            getRoot.removeChild(document.querySelector(".playerBoard"));
+            game.getReceiver().board.isGameOver() ? game.setWinner(game.getAttacker().name) : game.nextTurn();
+            this.play(game);
+
+     }
+     static hit = (e) => e.currentTarget.classList.add("hit");
+     static miss = (e) => e.currentTarget.classList.add("miss")
      static play =(game) =>{
-        const getRoot =  document.getElementById("root");
 
         if(game.winner != null){
             getRoot.appendChild(loadPlayAgainMenu(game.getAttacker().name, game.getReceiver().name));
@@ -190,27 +220,13 @@ export default class GameSetup{
                 if(game.getReceiver().board.grid[row][col] === "hit" || game.getReceiver().board.grid[row][col] === "miss"){ 
                     return;
                 }
-                item.addEventListener(("click"), e =>{
-                    const row = e.currentTarget.getAttribute("row");
-                    const col = e.currentTarget.getAttribute("col");
-                    game.getAttacker().attack(game.getReceiver().name, row, col);
-                    getRoot.removeChild(document.querySelector(".playerBoard"));
-                    game.getReceiver().board.isGameOver() ? game.setWinner(game.getAttacker().name) : game.nextTurn();
-                    // game.nextTurn();
-                    this.play(game);
-                });
+                item.addEventListener(("click"), (e) => this.attack(e, game));
             });
         } else {
             //random attack
             plotShips(game.getReceiver().name, game.getReceiver().board);
             game.getAttacker().randomAttack(game.getReceiver().name);
-            setTimeout(() =>{
-                getRoot.removeChild(document.querySelector(".playerBoard"));
-                game.getReceiver().board.isGameOver() ? game.setWinner(game.getAttacker().name) : game.nextTurn();
-
-                // game.nextTurn();
-                this.play(game);
-            }, 1000);
+            setTimeout(() => this.nextTurn(game), 1000);
         }
         return game.getCurrentTurnOpponent();
 
